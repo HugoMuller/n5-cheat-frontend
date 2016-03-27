@@ -20,7 +20,8 @@ const paths = {
   styles: [`${yeoman.app}/styles/main.less`],
   views: {
     main: `${yeoman.app}/index.html`,
-    files: [`${yeoman.app}/views/**/*.html`, `${yeoman.app}/scripts/**/*.html`]
+    files: `${yeoman.app}/views/**/*.html`,
+    directives: `${yeoman.app}/scripts/**/*.html`
   }
 };
 
@@ -66,6 +67,10 @@ gulp.task('watch', () => {
     .pipe($.plumber())
     .pipe($.connect.reload());
 
+  $.watch(paths.views.directives)
+    .pipe($.plumber())
+    .pipe($.connect.reload());
+
   $.watch(paths.scripts)
     .pipe($.plumber())
     .pipe($.connect.reload());
@@ -106,7 +111,6 @@ gulp.task('clean:dist', (cb) => {
 });
 
 gulp.task('client:build', ['html', 'styles'], () => {
-  //'**/*.js'
   const jsFilter = $.filter('**/*.js');
   const cssFilter = $.filter('**/*.css');
   const refFilter = $.filter(['**/*.js', '**/*.css']);
@@ -114,11 +118,12 @@ gulp.task('client:build', ['html', 'styles'], () => {
     presets: ['es2015']
   };
 
-  const babelify = $.if('scripts.js', $.babel(babelConfig));
+  const babelify = $.if('scripts/scripts.js', $.babel(babelConfig));
 
   return gulp
     .src(paths.views.main)
-    .pipe($.useref({searchPath: [yeoman.app, yeoman.tmp]}), babelify)
+    .pipe($.useref({searchPath: [yeoman.app, yeoman.tmp]}))
+    .pipe(babelify)
     .pipe(jsFilter)
     .pipe($.ngAnnotate())
     .pipe($.uglify())
@@ -133,11 +138,15 @@ gulp.task('client:build', ['html', 'styles'], () => {
     .pipe(gulp.dest(yeoman.dist));
 });
 
-gulp.task('html', () =>
+gulp.task('html', () => {
   gulp
     .src(paths.views.files)
-    .pipe(gulp.dest(`${yeoman.dist}/views`))
-);
+    .pipe(gulp.dest(`${yeoman.dist}/views`));
+
+  gulp
+    .src(paths.views.directives)
+    .pipe(gulp.dest(`${yeoman.dist}/scripts`));
+});
 
 gulp.task('copy:dev', ['copy:devStyles'], () =>
   gulp
