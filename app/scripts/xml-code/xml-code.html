@@ -1,0 +1,49 @@
+<span class="xml-line">
+  <span class="xml-tag">&lt;game</span>
+  <span>&nbsp;</span>
+  <span class="xml-attr">title=</span>
+  <span class="xml-attr-value">"{{vm.game.title}}"</span>
+  <span class="xml-tag">&gt;</span>
+</span>
+
+<span class="xml-line">
+  <span>&nbsp;&nbsp;</span>
+  <span class="xml-tag">&lt;version</span>
+  <span>&nbsp;</span>
+  <span class="xml-attr">CRC=</span>
+  <span class="xml-attr-value">"{{vm.version.crc.toUpperCase()}}"</span>
+  <span>&nbsp;</span>
+  <span class="xml-attr">codeCount=</span>
+  <span class="xml-attr-value">"{{vm.countCheats()}}"</span>
+  <span>&nbsp;</span>
+  <span class="xml-attr">title=</span>
+  <span class="xml-attr-value">"{{vm.version.title}}"</span>
+  <span class="xml-tag">&gt;</span>
+</span>
+
+<span class="xml-line" data-ng-repeat="cheat in vm.cheats | nonEmpty">
+  <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+  <span class="xml-tag">&lt;cheat</span>
+  <span>&nbsp;</span>
+  <span class="xml-attr">format=</span>
+  <span class="xml-attr-value">"{{cheat.format}}"</span>
+  <span>&nbsp;</span>
+  <span class="xml-attr">hacker=</span>
+  <span class="xml-attr-value">"{{cheat.hacker || 'Unknown'}}"</span>
+  <span>&nbsp;</span>
+  <span class="xml-attr">name=</span>
+  <span class="xml-attr-value">"{{cheat.name}}"</span>
+  <span class="xml-tag">&gt;</span>
+  <span class="xml-value">{{cheat.code | formatCode:cheat.format}}</span>
+  <span class="xml-tag">&lt;/cheat&gt;</span>
+</span>
+
+<span class="xml-line">
+  <span>&nbsp;&nbsp;</span>
+  <span class="xml-tag">&lt;/version&gt;</span>
+</span>
+
+<span class="xml-line">
+  <span class="xml-tag">&lt;/game&gt;</span>
+</span>
+

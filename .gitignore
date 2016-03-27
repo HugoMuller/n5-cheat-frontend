@@ -1,0 +1,13 @@
+!.gitkeep
+logs/*
+node_modules/
+bower_components/
+app/bower_components/
+dist/
+reports/
+tmp
+.tmp
+.DS_Store
+.idea
+
+app/styles/*.css

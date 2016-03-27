@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="n5cheat">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>GameShark Cheats XML</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+  </head>
+
+  <body>
+    <div ng-view></div>
+
+    <!-- build:js(.) scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="bower_components/angular-messages/angular-messages.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <script src="scripts/app.module.js"></script>
+    <script src="scripts/app.js"></script>
+    <script src="config/env.js"></script>
+    <script src="scripts/filters/format-code.js"></script>
+    <script src="scripts/filters/non-empty.js"></script>
+    <script src="scripts/cheat/cheat.directive.js"></script>
+    <script src="scripts/cheat/cheat.service.js"></script>
+    <script src="scripts/xml-code/xml-code.directive.js"></script>
+    <script src="scripts/editor/editor.directive.js"></script>
+    <!-- endbuild -->
+  </body>
+</html>

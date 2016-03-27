@@ -1,0 +1,24 @@
+<div id="cheat-{{cheat.id}}" class="cheat fieldset cheat">
+  <div class="fieldset-legend">Cheat #{{cheat.computeCheatId()}} <a class="btn btn-remove" href="#/" data-ng-click="removeCheat()">remove</a></div>
+
+  <table class="fieldset-content">
+    <tr>
+      <td>Format<sup>*</sup>:&nbsp;</td>
+      <td>
+        <select
+          data-ng-init="cheat.format = formats[0]"
+          data-ng-model="cheat.format"
+          data-ng-options="format for format in formats">
+        </select>
+      </td>
+      <td>Hacker:&nbsp;</td>
+      <td><input type="text" data-ng-model="cheat.hacker" maxlength="50"></td>
+    </tr>
+    <tr>
+      <td>Name<sup>*</sup>:&nbsp;</td>
+      <td><input type="text" data-ng-model="cheat.name" maxlength="50" required/></td>
+      <td>Code<sup>*</sup>:&nbsp;</td>
+      <td><textarea data-ng-model="cheat.code" placeholder="{{codePlaceHolder()}}" required></textarea></td>
+    </tr>
+  </table>
+</div>
