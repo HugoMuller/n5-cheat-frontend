@@ -21,7 +21,7 @@
   <span class="xml-tag">&gt;</span>
 </span>
 
-<span class="xml-line" data-ng-repeat="cheat in vm.cheats | nonEmpty">
+<span class="xml-line" data-ng-repeat="cheat in vm.cheats | validCheats">
   <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
   <span class="xml-tag">&lt;cheat</span>
   <span>&nbsp;</span>
@@ -46,4 +46,3 @@
 <span class="xml-line">
   <span class="xml-tag">&lt;/game&gt;</span>
 </span>
-

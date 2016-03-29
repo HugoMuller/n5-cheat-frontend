@@ -24,7 +24,7 @@
           tokens.push(token.match(/.{2,4}/g).join(':'));
         });
       }else{
-        tokens = [res];
+        return res;
       }
 
       return tokens.join(',');

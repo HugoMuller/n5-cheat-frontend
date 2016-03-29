@@ -3,8 +3,8 @@
 
   angular
     .module('n5cheat.editor')
-    .directive('editor', Editor)
-    .controller('EditorCtrl', EditorCtrl);
+    .controller('EditorCtrl', EditorCtrl)
+    .directive('editor', Editor);
 
   Editor.$inject = [];
 
@@ -18,9 +18,9 @@
     };
   }
 
-  EditorCtrl.$inject = ['$scope', '$compile', 'cheatService', 'ENV', 'nonEmptyFilter'];
+  EditorCtrl.$inject = ['$scope', '$compile', 'cheatService', 'ENV', 'validCheatsFilter'];
 
-  function EditorCtrl($scope, $compile, cheatService, ENV, nonEmptyFilter){
+  function EditorCtrl($scope, $compile, cheatService, ENV, validCheatsFilter){
     const vm = this;
 
     vm.addCheat = addCheat;
@@ -59,7 +59,7 @@
     }
 
     function countCheats(){
-      return nonEmptyFilter(vm.cheats).length;
+      return validCheatsFilter(vm.cheats).length;
     }
 
     function getCodePlaceHolder(id){
@@ -68,16 +68,17 @@
     }
 
     function showXml(){
-      return hasGameTitle() && hasVersionCrc() && hasVersionTitle() && vm.countCheats() > 0;
+      return vm.hasGameTitle() && vm.hasVersionCrc() && vm.hasVersionTitle() && vm.countCheats() > 0;
     }
 
     ///////////////////////////////////////////////////////////////////////////
 
     function init(){
       vm.availableFormats = [ENV.codeFormat.GameShark, ENV.codeFormat.GameGenie];
-      vm.codePlaceHolders = {};
-      vm.codePlaceHolders[ENV.codeFormat.GameShark] = '0123ABCD';
-      vm.codePlaceHolders[ENV.codeFormat.GameGenie] = '0123:AB';
+      vm.codePlaceHolders = {
+        [ENV.codeFormat.GameShark]: '0123ABCD',
+        [ENV.codeFormat.GameGenie]: '0123:AB'
+      };
       vm.game = {
         title: ''
       };

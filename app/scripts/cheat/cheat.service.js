@@ -25,7 +25,7 @@
       that.code = '';
 
       that.computeCheatId = computeCheatIdFromCheats(cheats);
-      that.formattedCode = formattedCode;
+      that.sanitizedCode = sanitizedCode;
 
       return that;
 
@@ -46,7 +46,7 @@
         };
       }
 
-      function formattedCode(){
+      function sanitizedCode(){
         const res = (that.code || '')
           .replace(/\r\n|\r|\n/g, ',')
           .replace(/[^A-Fa-f0-9:,]/g, '')

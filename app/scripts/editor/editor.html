@@ -2,7 +2,7 @@
   <div class="editor-left">
     <div class="fieldset dark">
       <div class="fieldset-legend">Game Information</div>
-      
+
       <div class="fieldset-content">
         Title<sup>*</sup>:&nbsp;
         <input type="text"
@@ -11,12 +11,12 @@
                maxlength="50"
                required/>
       </div>
-      
+
     </div>
 
     <div class="fieldset dark">
       <div class="fieldset-legend">Version</div>
-      
+
       <div class="fieldset-content">
         CRC<sup>*</sup>:&nbsp;
         <input
@@ -25,7 +25,7 @@
           placeholder="CRC" maxlength="8"
           pattern="[a-zA-Z0-9]{8}"
           required>
-        
+
         Title<sup>*</sup>:&nbsp;
         <input
           type="text"
@@ -38,10 +38,10 @@
 
     <div class="fieldset dark">
       <div class="fieldset-legend">Cheats</div>
-      
+
       <div class="fieldset-content">
         <div id="cheats-container"></div>
-        
+
         <div class="more-cheats-container">
           <a class="btn btn-add" href="#/" data-ng-click="vm.addCheat()">Add cheat</a>
         </div>
@@ -56,7 +56,7 @@
       <div class="fieldset-content">
         <div class="xml-info xml-info-error" data-ng-if="!vm.showXml()">
           <div>XML is malformed</div>
-          
+
           <ul>
             <li data-ng-if="!vm.hasGameTitle()">No game title</li>
             <li data-ng-if="!vm.hasVersionCrc()">No valid version CRC</li>
