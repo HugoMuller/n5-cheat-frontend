@@ -41,6 +41,7 @@
       vm.cheats.push(cheatService(vm.cheats));
 
       const elem = `<div cheat="vm.cheats[${id}]"
+        id="cheat-${id}"
         formats="vm.availableFormats"
         removecheat="vm.removeCheat(${id})"
         codeplaceholder="vm.getCodePlaceHolder(${id})"></div>`;

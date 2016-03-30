@@ -41,7 +41,8 @@ module.exports = function(overrides){
 
       // list of files / patterns to exclude
       exclude: [
-        'test/unit/config/*'
+        'test/unit/config/*',
+        'app/bower_components/**/*'
       ],
 
       // web server port
@@ -98,6 +99,11 @@ module.exports = function(overrides){
         filename: file => file.originalPath.replace(/\.js$/, '.es5.js'),
         sourceFileName: file => file.originalPath,
       },
+
+      ngHtml2JsPreprocessor: {
+        cacheIdFromPath : (filepath) => filepath.substr('app/'.length),
+        moduleName: 'templates'
+      }
     };
 
     config.set(_.assignInWith({}, base, overrides, concatArrays));

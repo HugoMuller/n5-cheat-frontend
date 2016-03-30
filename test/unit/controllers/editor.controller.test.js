@@ -1,10 +1,12 @@
 (function(){
   'use strict';
 
-  let $document;
+  let cheatService;
   let controller;
+  let $compile;
   let $controller;
   let $rootScope;
+  let $scope;
   let validCheatsFilter;
   let ENV;
 
@@ -16,8 +18,8 @@
     beforeEach(injectThings);
 
     describe('init', initSuite);
-    //describe('.addCheat', addCheatSuite);
-    //describe('.removeCheat', removeCheatSuite);
+    describe('.addCheat', addCheatSuite);
+    describe('.removeCheat', removeCheatSuite);
     describe('.countCheats', countCheatsSuite);
     describe('.getCodePlaceHolder', getCodePlaceHolderSuite);
     describe('.showXml', showXmlSuite);
@@ -66,13 +68,13 @@
   //////////////////////////////////////////////////////////////////////////////
 
   function addCheatSuite(){
+    beforeEach(initDOM);
+
     it('should add a cheat', addCheatTest);
   }
 
   function addCheatTest(){
     controller = createWithParams();
-    $rootScope.$apply();
-    $rootScope.$digest();
     expect(controller.cheats.length).toBe(0);
     expect(getCheatElemCount()).toBe(0);
 
@@ -86,7 +88,37 @@
   //////////////////////////////////////////////////////////////////////////////
 
   function removeCheatSuite(){
+    beforeEach(initDOM);
 
+    it('should remove a cheat', removeCheatTest);
+  }
+
+  function removeCheatTest(){
+    controller = createWithParams({
+      cheats: [cheatService()]
+    });
+    addFakeCheatInDOM();
+
+    expect(controller.cheats.length).toBe(1);
+    expect(getCheatElemCount()).toBe(1);
+
+    controller.removeCheat(0);
+
+    expect(controller.cheats[0]).not.toBeDefined();
+    expect(getCheatElemCount()).toBe(0);
+
+    function addFakeCheatInDOM(){
+      const cheat = $compile(`<div cheat="vm.cheats[0]"
+        id="cheat-0"
+        formats="vm.availableFormats"
+        removecheat="vm.removeCheat(0)"
+        codeplaceholder="vm.getCodePlaceHolder(0)"></div>`)($scope);
+      $scope.$digest();
+
+      angular
+        .element(document.querySelector('#cheats-container'))
+        .append(cheat);
+    }
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -242,14 +274,13 @@
     module('n5cheat.editor');
     module('n5cheat.cheat');
     module('n5cheat.filters');
-    module('app/scripts/editor/editor.html');
-    module('app/scripts/cheat/cheat.html');
+    module('templates');
   }
 
   function mock(){
-    validCheatsFilter = sinon.stub();
+    validCheatsFilter = sinon.stub().returns([]);
 
-    const cheatService = sinon.stub().returns({
+    cheatService = sinon.stub().returns({
       id: 0,
       format: 'format',
       hacker: 'hacker',
@@ -265,18 +296,27 @@
   }
 
   function injectThings(){
-    inject(($compile, _$document_, _$controller_, _$rootScope_, _ENV_) => {
-      $document = _$document_;
+    inject((_$compile_, _$controller_, _$rootScope_, _ENV_) => {
+      $compile = _$compile_;
       $controller = _$controller_;
       $rootScope = _$rootScope_;
+      $scope = $rootScope.$new();
       ENV = _ENV_;
-      //$document.append($compile('<editor></editor>')($rootScope));
     });
+  }
+
+  function initDOM(){
+    const editor = $compile('<editor></editor>')($scope);
+    $scope.$digest();
+
+    angular
+      .element(document.body)
+      .html(editor.html());
   }
 
   function createWithParams(params){
     params = params || {};
-    const _controller =  $controller('EditorCtrl', { $scope: $rootScope.$new() });
+    const _controller =  $controller('EditorCtrl', { $scope });
 
     for(const p in params){
       if(params.hasOwnProperty(p)){
@@ -296,6 +336,8 @@
   }
 
   function getCheatElemCount(){
-    return $document(document.querySelectorAll('#cheats-container > div[cheat]')).length;
+    return angular
+      .element(document.querySelectorAll('#cheats-container div[cheat]'))
+      .length;
   }
 })();
