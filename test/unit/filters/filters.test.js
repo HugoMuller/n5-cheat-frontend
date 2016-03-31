@@ -19,23 +19,47 @@
 
   function formatCodeSuite(){
     it('should format a code with the given format', formatCodeTest);
+    it('should not format a code if unknown format', noFormatCodeTest);
   }
 
   function formatCodeTest(){
+    const codes = [
+      undefined,
+      `abcdefghijklmnopqrstuvwxyz
+      ABCDEFGHIJKLMNOPQRSTUVWXYZ
+      012345679:0123 456 789:0,1&~#!`
+    ];
+
+    const expected = [
+      {
+        GameShark: '',
+        GameGenie: ''
+      }, {
+        GameShark: 'ABCDEFAB,CDEF0123,45679012,34567890',
+        GameGenie: 'ABCD:EF,ABCD:EF,0123:45,6790:12,3456:78'
+      }
+    ];
+
+    codes.forEach((code, i) => {
+      Object
+        .keys(ENV.codeFormat)
+        .forEach(testFormatOnCode(code, i));
+    });
+
+    function testFormatOnCode(code, i){
+      return (format) => {
+        should(formatCodeFilter(code, ENV.codeFormat[format]))
+          .equal(expected[i][format]);
+      };
+    }
+  }
+
+  function noFormatCodeTest(){
     const code = `abcdefghijklmnopqrstuvwxyz
     ABCDEFGHIJKLMNOPQRSTUVWXYZ
     012345679:0123 456 789:0,1&~#!`;
 
-    const expected = {
-      GameShark: 'ABCDEFAB,CDEF0123,45679012,34567890',
-      GameGenie: 'ABCD:EF,ABCD:EF,0123:45,6790:12,3456:78'
-    };
-
-    Object.keys(ENV.codeFormat).forEach(testOneFormat);
-
-    function testOneFormat(format){
-      should(formatCodeFilter(code, ENV.codeFormat[format])).equal(expected[format]);
-    }
+    should(formatCodeFilter(code, 'unknown format')).equal('ABCDEFABCDEF012345679012345678901');
   }
 
   //////////////////////////////////////////////////////////////////////////////

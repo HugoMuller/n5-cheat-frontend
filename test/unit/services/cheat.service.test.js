@@ -48,6 +48,10 @@
 
     [
       {
+        actual: undefined,
+        expected: ''
+      },
+      {
         actual: '   ',
         expected: ''
       }, {
