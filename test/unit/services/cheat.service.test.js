@@ -18,29 +18,29 @@
     let cheat = cheatService(cheats);
     cheats.push(cheat);
 
-    expect(cheat.id).toBe(0);
-    expect(cheat.format).toBe('');
-    expect(cheat.hacker).toBe('');
-    expect(cheat.name).toBe('');
-    expect(cheat.code).toBe('');
-    expect(cheat.computeCheatId()).toBe(1);
+    should(cheat.id).equal(0);
+    should(cheat.format).equal('');
+    should(cheat.hacker).equal('');
+    should(cheat.name).equal('');
+    should(cheat.code).equal('');
+    should(cheat.computeCheatId()).equal(1);
 
     cheat = cheatService(cheats);
     cheats.push(cheat);
-    expect(cheat.id).toBe(1);
-    expect(cheat.computeCheatId()).toBe(2);
+    should(cheat.id).equal(1);
+    should(cheat.computeCheatId()).equal(2);
 
     cheats[0] = undefined;
     cheat = cheatService(cheats);
     cheats.push(cheat);
-    expect(cheat.id).toBe(2);
-    expect(cheat.computeCheatId()).toBe(2);
+    should(cheat.id).equal(2);
+    should(cheat.computeCheatId()).equal(2);
 
     delete cheats[0];
     cheat = cheatService(cheats);
     cheats.push(cheat);
-    expect(cheat.id).toBe(3);
-    expect(cheat.computeCheatId()).toBe(3);
+    should(cheat.id).equal(3);
+    should(cheat.computeCheatId()).equal(3);
   }
 
   function formattedCodeTest(){
@@ -64,7 +64,7 @@
 
     function testCode(code){
       cheat.code = code.actual;
-      expect(cheat.sanitizedCode()).toBe(code.expected);
+      should(cheat.sanitizedCode()).equal(code.expected);
     }
   }
 

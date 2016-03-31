@@ -96,7 +96,7 @@
     }
 
     function hasVersionCrc(){
-      return !!vm.version.crc && vm.version.crc.length === 8;
+      return !!vm.version.crc && /^[a-fA-F0-9]{8}$/.test(vm.version.crc);
     }
 
     function hasVersionTitle(){

@@ -34,7 +34,7 @@
     Object.keys(ENV.codeFormat).forEach(testOneFormat);
 
     function testOneFormat(format){
-      expect(formatCodeFilter(code, ENV.codeFormat[format])).toBe(expected[format]);
+      should(formatCodeFilter(code, ENV.codeFormat[format])).equal(expected[format]);
     }
   }
 
@@ -55,7 +55,7 @@
       validCheat
     ];
 
-    expect(validCheatsFilter(cheats)).toEqual([validCheat]);
+    should(validCheatsFilter(cheats)).eql([validCheat]);
 
     function fakeCheat(format, name, sanitized){
       return {

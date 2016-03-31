@@ -13,7 +13,7 @@ module.exports = function(overrides){
 
       // testing framework to use (jasmine/mocha/qunit/...)
       // as well as any additional frameworks (requirejs/chai/sinon/...)
-      frameworks: ["jasmine", "sinon"],
+      frameworks: ['mocha', 'should', 'sinon'],
 
       // list of files / patterns to load in the browser
       files: [
@@ -57,21 +57,20 @@ module.exports = function(overrides){
       // - PhantomJS
       // - IE (only Windows)
       browsers: [
-        //"PhantomJS",
-        "Chrome"
+        'PhantomJS'
       ],
 
       reporters : ['spec'],
 
       // Which plugins to enable
       plugins: [
-        //"karma-phantomjs-launcher",
-        "karma-chrome-launcher",
-        "karma-jasmine",
-        "karma-sinon",
-        "karma-spec-reporter",
-        "karma-babel-preprocessor",
+        'karma-babel-preprocessor',
+        'karma-mocha',
         'karma-ng-html2js-preprocessor',
+        'karma-phantomjs-launcher',
+        'karma-should',
+        'karma-sinon',
+        'karma-spec-reporter',
       ],
 
       // Continuous Integration mode

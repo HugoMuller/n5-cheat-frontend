@@ -5,7 +5,6 @@
   let controller;
   let $compile;
   let $controller;
-  let $rootScope;
   let $scope;
   let validCheatsFilter;
   let ENV;
@@ -37,32 +36,34 @@
   function initTest(){
     controller = createWithParams();
 
-    expect(controller.availableFormats).toBeDefined();
-    expect(controller.availableFormats.length).toBe(2);
+    should(controller.availableFormats).not.be.undefined();
+    should(controller.availableFormats.length).equal(2);
 
-    expect(controller.codePlaceHolders).toBeDefined();
-    expect(controller.codePlaceHolders[ENV.codeFormat.GameShark]).toBeDefined();
-    expect(controller.codePlaceHolders[ENV.codeFormat.GameGenie]).toBeDefined();
+    should(controller.codePlaceHolders).not.be.undefined();
+    should(controller.codePlaceHolders[ENV.codeFormat.GameShark]).not.be.undefined();
+    should(controller.codePlaceHolders[ENV.codeFormat.GameGenie]).not.be.undefined();
 
-    expect(controller.game).toBeDefined();
-    expect(controller.game.title).toBe('');
+    should(controller.game).not.be.undefined();
+    should(controller.game.title).equal('');
 
-    expect(controller.version).toBeDefined();
-    expect(controller.version.crc).toBe('');
-    expect(controller.version.codeCount).toBe(0);
-    expect(controller.version.title).toBe('');
+    should(controller.version).not.be.undefined();
+    should(controller.version.crc).equal('');
+    should(controller.version.codeCount).equal(0);
+    should(controller.version.title).equal('');
 
-    expect(controller.cheats).toBeDefined();
-    expect(controller.cheats.length).toBe(0);
+    should(controller.cheats).not.be.undefined();
+    should(controller.cheats.length).equal(0);
 
-    expect(controller.addCheat).toEqual(jasmine.any(Function));
-    expect(controller.removeCheat).toEqual(jasmine.any(Function));
-    expect(controller.countCheats).toEqual(jasmine.any(Function));
-    expect(controller.getCodePlaceHolder).toEqual(jasmine.any(Function));
-    expect(controller.showXml).toEqual(jasmine.any(Function));
-    expect(controller.hasGameTitle).toEqual(jasmine.any(Function));
-    expect(controller.hasVersionCrc).toEqual(jasmine.any(Function));
-    expect(controller.hasVersionTitle).toEqual(jasmine.any(Function));
+    [
+      'addCheat',
+      'countCheats',
+      'getCodePlaceHolder',
+      'hasGameTitle',
+      'hasVersionCrc',
+      'hasVersionTitle',
+      'removeCheat',
+      'showXml'
+    ].forEach((fn) => should(controller[fn]).be.a.Function());
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -75,13 +76,13 @@
 
   function addCheatTest(){
     controller = createWithParams();
-    expect(controller.cheats.length).toBe(0);
-    expect(getCheatElemCount()).toBe(0);
+    should(controller.cheats.length).equal(0);
+    should(getCheatElemCount()).equal(0);
 
     for(let i=1; i<5; i++){
       controller.addCheat();
-      expect(controller.cheats.length).toBe(i);
-      expect(getCheatElemCount()).toBe(i);
+      should(controller.cheats.length).equal(i);
+      should(getCheatElemCount()).equal(i);
     }
   }
 
@@ -99,13 +100,13 @@
     });
     addFakeCheatInDOM();
 
-    expect(controller.cheats.length).toBe(1);
-    expect(getCheatElemCount()).toBe(1);
+    should(controller.cheats.length).equal(1);
+    should(getCheatElemCount()).equal(1);
 
     controller.removeCheat(0);
 
-    expect(controller.cheats[0]).not.toBeDefined();
-    expect(getCheatElemCount()).toBe(0);
+    should(controller.cheats[0]).be.undefined();
+    should(getCheatElemCount()).equal(0);
 
     function addFakeCheatInDOM(){
       const cheat = $compile(`<div cheat="vm.cheats[0]"
@@ -136,7 +137,7 @@
       [1,2,3,4,5]
     ].forEach((arr) => {
       validCheatsFilter.returns(arr);
-      expect(controller.countCheats()).toBe(arr.length);
+      should(controller.countCheats()).equal(arr.length);
     });
   }
 
@@ -150,16 +151,16 @@
     controller = createWithParams();
 
     controller.cheats[0] = undefined;
-    expect(controller.getCodePlaceHolder(0)).toBe('');
+    should(controller.getCodePlaceHolder(0)).equal('');
 
     controller.cheats[0] = { format: ENV.codeFormat.GameShark };
-    expect(controller.getCodePlaceHolder(0)).toMatch(/^[A-Fa-f0-9:]+$/);
+    should(controller.getCodePlaceHolder(0)).match(/^[A-Fa-f0-9:]+$/);
 
     controller.cheats[0].format = ENV.codeFormat.GameGenie;
-    expect(controller.getCodePlaceHolder(0)).toMatch(/^[A-Fa-f0-9:]+$/);
+    should(controller.getCodePlaceHolder(0)).match(/^[A-Fa-f0-9:]+$/);
 
     controller.cheats[0].format = 'some unknown format';
-    expect(controller.getCodePlaceHolder(0)).toBe(undefined);
+    should(controller.getCodePlaceHolder(0)).be.undefined();
 
   }
 
@@ -178,7 +179,7 @@
       countCheats: sinon.stub().returns(1)
     };
     controller = createWithParams(stubs);
-    expect(controller.showXml()).toBe(true);
+    should(controller.showXml()).be.true();
   }
 
   function showXmlFalsyTest(){
@@ -194,7 +195,7 @@
     function falsyTest(stub){
       setTruthyStub(stubs, stub);
       stubs.countCheats.returns(stub === 'countCheats' ? 1 : 0);
-      expect(controller.showXml()).toBe(false);
+      should(controller.showXml()).be.false();
     }
   }
 
@@ -211,12 +212,12 @@
         title: 'title'
       }
     });
-    expect(controller.hasGameTitle()).toBe(true);
+    should(controller.hasGameTitle()).be.true();
   }
 
   function hasGameTitleFalsyTest(){
     controller = createWithParams();
-    expect(controller.hasGameTitle()).toBe(false);
+    should(controller.hasGameTitle()).be.false();
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -227,23 +228,38 @@
   }
 
   function hasVersionCrcTruthyTest(){
-    controller = createWithParams({
-      version: {
-        crc: '12345678'
-      }
-    });
-    expect(controller.hasVersionCrc()).toBe(true);
+    controller = createWithParams();
+
+    [
+      '01234567',
+      '12345678',
+      '0123ABCD',
+      '0789CDEF',
+      'FFFFFFFF',
+      '00000000'
+    ].forEach(crcShouldBe(true));
   }
 
   function hasVersionCrcFalsyTest(){
     controller = createWithParams();
 
-    [null, '', '123467', '123456789'].forEach(falsyTest);
+    [
+      null,
+      undefined,
+      '',
+      '123467',
+      '123456789',
+      'ADC',
+      '0FFFFFFFF',
+      'GHIJKLMN'
+    ].forEach(crcShouldBe(false));
+  }
 
-    function falsyTest(crc){
+  function crcShouldBe(trueOrFalse){
+    return (crc) => {
       controller.version.crc = crc;
-      expect(controller.hasVersionCrc()).toBe(false);
-    }
+      should(controller.hasVersionCrc()).equal(trueOrFalse);
+    };
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -259,12 +275,12 @@
         title: 'title'
       }
     });
-    expect(controller.hasVersionTitle()).toBe(true);
+    should(controller.hasVersionTitle()).be.true();
   }
 
   function hasVersionTitleFalsyTest(){
     controller = createWithParams();
-    expect(controller.hasVersionTitle()).toBe(false);
+    should(controller.hasVersionTitle()).be.false();
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -273,7 +289,6 @@
     module('n5cheat');
     module('n5cheat.editor');
     module('n5cheat.cheat');
-    module('n5cheat.filters');
     module('templates');
   }
 
@@ -296,10 +311,9 @@
   }
 
   function injectThings(){
-    inject((_$compile_, _$controller_, _$rootScope_, _ENV_) => {
+    inject((_$compile_, _$controller_, $rootScope, _ENV_) => {
       $compile = _$compile_;
       $controller = _$controller_;
-      $rootScope = _$rootScope_;
       $scope = $rootScope.$new();
       ENV = _ENV_;
     });

@@ -43,27 +43,28 @@
     "karma-es6-shim": "^0.2.3",
     "karma-jasmine": "~0.3.0",
     "karma-junit-reporter": "^0.3.8",
+    "karma-mocha": "^0.2.2",
     "karma-ng-html2js-preprocessor": "^0.2.1",
     "karma-phantomjs-launcher": "*",
+    "karma-should": "^1.0.0",
     "karma-sinon": "^1.0.4",
     "karma-spec-reporter": "0.0.24",
     "lodash": "^4.5.0",
+    "mocha": "^2.4.5",
     "phantomjs-prebuilt": "^2.1.4",
+    "should": "^8.3.0",
     "sinon": "^1.17.3"
   },
   "scripts": {
     "start": "gulp serve",
     "postinstall": "bower install",
-
     "test": "karma start test/unit/config/karma-dev.conf.js",
     "test-single-run": "karma start test/unit/config/karma-dev.conf.js --single-run",
     "ci-test": "karma start test/unit/config/karma-ci.conf.js --single-run",
-
     "preci-jshint": "mkdir -p reports",
     "ci-jshint": "eslint -f jslint-xml -o reports/jshint.xml app test *.js || true",
     "preci-cpd": "mkdir -p reports",
     "ci-cpd": "jscpd --output reports/cpd.xml",
-
     "clean": "rm -rf bower_components node_modules reports",
     "clean-app": "rm -rf app/bower_components",
     "clean-all": "rm -rf bower_components node_modules reports app/bower_components"
