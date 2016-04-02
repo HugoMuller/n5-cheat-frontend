@@ -11,3 +11,4 @@ tmp
 .idea
 
 app/styles/*.css
+npm-debug.log

@@ -1,0 +1,11 @@
+{
+  "extends": "../../.eslintrc",
+  "env": {
+    "jasmine": true,
+    "commonjs": true,
+    "protractor": true
+  },
+  "rules": {
+    "no-invalid-this": [0]
+  }
+}

@@ -80,8 +80,9 @@ gulp.task('watch', () => {
 
 gulp.task('serve', (cb) => {
   runSequence('clean:tmp',
-  ['start:client'],
-  'watch', cb);
+  'start:client',
+  'watch',
+  cb);
 });
 
 gulp.task('serve:prod', () => {
@@ -161,7 +162,7 @@ gulp.task('copy:devStyles', ['styles'], () =>
 );
 
 gulp.task('build', ['clean:dist'], () => {
-  runSequence(['client:build']);
+  runSequence('client:build');
 });
 
 gulp.task('default', ['build']);
