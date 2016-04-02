@@ -3,13 +3,13 @@
 const elements = require('../utils/editor-elements.js');
 
 module.exports = {
-  initTest,
+  init,
   setGameTitle,
   setVersionCrc,
   setVersionTitle
 };
 
-function initTest(){
+function init(){
   browser.get('/');
 
   expect(browser.getTitle()).toBe('RetroN5 cheats manager');
@@ -56,7 +56,6 @@ function initTest(){
 
   expect(xmlErrorList.count()).toBe(4);
   expect(xmlErrorList.getText()).toEqual(xmlExpectedErrors);
-
   expect(elements.getXmlCheatLines().count()).toBe(0);
 
   //////////////////////////////////
@@ -81,11 +80,10 @@ function setGameTitle(){
 
   const inputGameTitle = elements.getInputGameTitle();
   const xmlGameTitle = elements.getXmlGameTitle();
-  const xmlErrors = elements.getXmlInfoErrorList();
+  const xmlErrorList = elements.getXmlInfoErrorList();
+  const expectValuesToBe = checkValuesOf(inputGameTitle, xmlGameTitle, xmlErrorList);
 
-  expect(inputGameTitle.getAttribute('value')).toBe('');
-  expect(xmlGameTitle.getText()).toBe('""');
-  expect(xmlErrors.getText()).toContain('No game title');
+  expectValuesToBe('', '""', 'No game title');
 
   [
     'short title',
@@ -98,24 +96,19 @@ function setGameTitle(){
     const expected = title.substr(0, 50);
 
     inputGameTitle.clear().sendKeys(title);
-
-    expect(inputGameTitle.getAttribute('value')).toBe(expected);
-    expect(xmlGameTitle.getText()).toBe(`"${expected}"`);
-    expect(xmlErrors.getText()).not.toContain('No game title');
+    expectValuesToBe(expected, `"${expected}"`, { not: 'No game title' });
   }
 }
+
+///////////////////////////////////////////////////////////////////////////
 
 function setVersionCrc(){
   browser.get('/');
 
   const inputVersionCrc = elements.getInputVersionCrc();
   const xmlVersionCrc = elements.getXmlVersionCrc();
-  const xmlErrors = elements.getXmlInfoErrorList();
-
-  expect(inputVersionCrc.getAttribute('value')).toBe('');
-  expect(xmlVersionCrc.getText()).toBe('""');
-  expect(xmlErrors.getText()).toContain('No valid version CRC');
-
+  const xmlErrorList = elements.getXmlInfoErrorList();
+  const expectValuesToBe = checkValuesOf(inputVersionCrc, xmlVersionCrc, xmlErrorList);
   const validCrc = [
     '01234567',
     '0123AbcD',
@@ -129,6 +122,7 @@ function setVersionCrc(){
     'abcdefghijk'
   ];
 
+  expectValuesToBe('', '""', 'No valid version CRC');
   validCrc.forEach(shouldBeOk);
   wrongCrc.forEach(shouldBeKo);
 
@@ -139,31 +133,26 @@ function setVersionCrc(){
     const expected = actual.toUpperCase();
 
     inputVersionCrc.clear().sendKeys(crc);
-
-    expect(inputVersionCrc.getAttribute('value')).toBe(actual);
-    expect(xmlVersionCrc.getText()).toBe(`"${expected}"`);
-    expect(xmlErrors.getText()).not.toContain('No valid version CRC');
+    expectValuesToBe(actual, `"${expected}"`, { not: 'No valid version CRC' });
   }
 
   function shouldBeKo(crc){
     inputVersionCrc.clear().sendKeys(crc);
-
-    expect(inputVersionCrc.getAttribute('value')).toBe(crc.substr(0, 8));
-    expect(xmlVersionCrc.getText()).toBe('""');
-    expect(xmlErrors.getText()).toContain('No valid version CRC');
+    expectValuesToBe(crc.substr(0, 8), '""', 'No valid version CRC');
   }
 }
+
+///////////////////////////////////////////////////////////////////////////
 
 function setVersionTitle(){
   browser.get('/');
 
   const inputVersionTitle = elements.getInputVersionTitle();
   const xmlVersionTitle = elements.getXmlVersionTitle();
-  const xmlErrors = elements.getXmlInfoErrorList();
+  const xmlErrorList = elements.getXmlInfoErrorList();
+  const expectValuesToBe = checkValuesOf(inputVersionTitle, xmlVersionTitle, xmlErrorList);
 
-  expect(inputVersionTitle.getAttribute('value')).toBe('');
-  expect(xmlVersionTitle.getText()).toBe('""');
-  expect(xmlErrors.getText()).toContain('No version title');
+  expectValuesToBe('', '""', 'No version title');
 
   [
     'short title',
@@ -176,9 +165,23 @@ function setVersionTitle(){
     const expected = title.substr(0, 50);
 
     inputVersionTitle.clear().sendKeys(title);
-
-    expect(inputVersionTitle.getAttribute('value')).toBe(expected);
-    expect(xmlVersionTitle.getText()).toBe(`"${expected}"`);
-    expect(xmlErrors.getText()).not.toContain('No version title');
+    expectValuesToBe(expected, `"${expected}"`, { not: 'No version title' });
   }
+}
+
+///////////////////////////////////////////////////////////////////////////
+
+function checkValuesOf(inputField, xmlField, xmlErrorList){
+  return (expectedInput, expectedXmlValue, expectedXmlError) => {
+    let expectXmlErrorList = expect(xmlErrorList.getText());
+    let expectedError = expectedXmlError;
+    if(expectedXmlError.hasOwnProperty('not')){
+      expectXmlErrorList = expectXmlErrorList.not;
+      expectedError = expectedError.not;
+    }
+
+    expect(inputField.getAttribute('value')).toBe(expectedInput);
+    expect(xmlField.getText()).toBe(expectedXmlValue);
+    expectXmlErrorList.toContain(expectedError);
+  };
 }

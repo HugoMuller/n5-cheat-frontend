@@ -29,9 +29,16 @@
     "comma-dangle": [2, "only-multiline"],
     // verify super() callings in constructors
     "constructor-super": 0,
+    // require === and !==
+    "eqeqeq": 2,
     // enforce the spacing around the * in generator functions
     "generator-star-spacing": 0,
+    // require guarding for-in
+    "guard-for-in": 2,
+    // validate indentation
     "indent": [2, 2],
+    // disallow shadowing of variables inside of catch
+    "no-catch-shadow": 2,
     // disallow modifying variables of class declarations
     "no-class-assign": 0,
     // disallow arrow functions where they could be confused with comparisons
@@ -39,12 +46,24 @@
     "no-confusing-arrow": 0,
     // disallow modifying variables that are declared using const
     "no-const-assign": 2,
+    // disallow return before else
+    "no-else-return": 2,
+    // disallow extra parens
+    "no-extra-parens": 2,
+    // disallow extra semicolons
+    "no-extra-semi": 2,
+    // disallow multiple spaces
+    "no-multi-spaces": 2,
     // disallow symbol constructor
     // http://eslint.org/docs/rules/no-new-symbol
     "no-new-symbol": 2,
     // disallow specific imports
     // http://eslint.org/docs/rules/no-restricted-imports
     "no-restricted-imports": 0,
+    // disallow shadowing
+    "no-shadow": 2,
+    // disallow shadowing of restricted names
+    "no-shadow-restricted-names": 2,
     // disallow to use this/super before super() calling in constructors.
     "no-this-before-super": 0,
     // require let or const instead of var

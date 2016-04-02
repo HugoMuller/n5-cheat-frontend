@@ -10,10 +10,12 @@ module.exports = {
 
   getCheatElementList,
   getCheatElement,
+  getCheatElementLegend,
   getCheatFormat,
   getCheatHacker,
   getCheatName,
   getCheatCode,
+  getCheatElementWrapper,
   getCheatRemoveButton,
 
   getEditorRight,
@@ -27,13 +29,14 @@ module.exports = {
   getXmlCheatCount,
   getXmlVersionTitle,
   getXmlCheatLines,
-  getXmlCheatLine
+  getXmlCheatLine,
+  getXmlCheatWrapper
 };
 
 ///////////////////////////////////////////////////////////////////////////
 // left editor
 function getEditorLeft(){
-  return browser.element(by.css('div.editor-left'));
+  return browser.$('div.editor-left');
 }
 
 function getInputGameTitle(){
@@ -49,22 +52,26 @@ function getInputVersionTitle(){
 }
 
 function getCheatsContainer(){
-  return getEditorLeft().element(by.css('div#cheats-container'));
+  return getEditorLeft().$('div#cheats-container');
 }
 
 function getMoreCheatsButton(){
-  return getEditorLeft().element(by.css('div.more-cheats-container > a'));
+  return getEditorLeft().$('div.more-cheats-container > a');
 }
 
 ///////////////////////////////////////////////////////////////////////////
 // cheats
 
 function getCheatElementList(){
-  return getCheatsContainer().all(by.css('div[cheat]'));
+  return getCheatsContainer().$$('div[cheat]');
 }
 
 function getCheatElement(id){
   return getCheatElementList().get(id);
+}
+
+function getCheatElementLegend(id){
+  return getCheatElement(id).$('div.fieldset-legend');
 }
 
 function getCheatFormat(id){
@@ -83,48 +90,84 @@ function getCheatCode(id){
   return getCheatElement(id).element(by.model('cheat.code'));
 }
 
+function getCheatElementWrapper(id){
+  const wrapper = {
+    element: getCheatElement(id),
+    name: attr('name'),
+    hacker: attr('hacker'),
+    format: ddl('format'),
+    code: attr('code')
+  };
+
+  return wrapper;
+
+  //////////////////////////////////
+
+  function attr(model){
+    return (value) => {
+      const input = wrapper.element.element(by.model(`cheat.${model}`));
+      if(value !== null && value !== undefined){
+        input.clear().sendKeys(value);
+        return wrapper;
+      }
+      return input.getAttribute('value');
+    };
+  }
+
+  function ddl(model){
+    return (value) => {
+      const input = wrapper.element.element(by.model(`cheat.${model}`));
+      if(value !== null && value !== undefined){
+        input.$(`option[label="${value}"]`).click();
+        return wrapper;
+      }
+      return input.$('option:checked').getText();
+    };
+  }
+}
+
 function getCheatRemoveButton(id){
-  return getCheatElement(id).element(by.css('a.btn.btn-remove'));
+  return getCheatElement(id).$('a.btn.btn-remove');
 }
 
 ///////////////////////////////////////////////////////////////////////////
 // right editor
 function getEditorRight(){
-  return browser.element(by.css('div.editor-right'));
+  return browser.$('div.editor-right');
 }
 
 function getXmlInfoErrorContainer(){
-  return getEditorRight().element(by.css('div.xml-info.xml-info-error'));
+  return getEditorRight().$('div.xml-info.xml-info-error');
 }
 
 function getXmlInfoErrorList(){
-  return getXmlInfoErrorContainer().all(by.css('ul > li'));
+  return getXmlInfoErrorContainer().$$('ul > li');
 }
 
 function getXmlInfoSuccessContainer(){
-  return getEditorRight().element(by.css('div.xml-info.xml-info-success'));
+  return getEditorRight().$('div.xml-info.xml-info-success');
 }
 
 ///////////////////////////////////////////////////////////////////////////
 // xml
 function getXmlCompiledContainer(){
-  return getEditorRight().element(by.css('div.xml-editor.fieldset-content'));
+  return getEditorRight().$('div.xml-editor.fieldset-content');
 }
 
 function getXmlGameTitle(){
-  return getXmlCompiledContainer().element(by.binding('vm.game.title'));
+  return getXmlCompiledContainer().element(by.exactBinding('vm.game.title'));
 }
 
 function getXmlVersionCrc(){
-  return getXmlCompiledContainer().element(by.binding('vm.version.crc.toUpperCase()'));
+  return getXmlCompiledContainer().element(by.exactBinding('vm.version.crc.toUpperCase()'));
 }
 
 function getXmlCheatCount(){
-  return getXmlCompiledContainer().element(by.binding('vm.countCheats()'));
+  return getXmlCompiledContainer().element(by.exactBinding('vm.countCheats()'));
 }
 
 function getXmlVersionTitle(){
-  return getXmlCompiledContainer().element(by.binding('vm.version.title'));
+  return getXmlCompiledContainer().element(by.exactBinding('vm.version.title'));
 }
 
 function getXmlCheatLines(){
@@ -132,5 +175,23 @@ function getXmlCheatLines(){
 }
 
 function getXmlCheatLine(id){
-  return getXmlCheatLines().row(id);
+  return getXmlCompiledContainer().element(by.repeater('cheat in vm.cheats | validCheats').row(id));
+}
+
+function getXmlCheatWrapper(id){
+  const wrapper = {
+    element: getXmlCheatLine(id),
+    name: attr('name'),
+    hacker: attr("hacker || 'Unknown'"),
+    format: attr('format'),
+    code: attr('code | formatCode:cheat.format')
+  };
+
+  return wrapper;
+
+  //////////////////////////////////
+
+  function attr(binding){
+    return () => wrapper.element.element(by.exactBinding(`cheat.${binding}`)).getText();
+  }
 }
