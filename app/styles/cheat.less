@@ -1,17 +1,25 @@
+@width-180: 180px;
+
 .cheat {
-  input[type=text] {
-    width: 180px;
+  input[type=text],
+  select {
+    width: @width-180;
   }
 
   textarea {
-    width: 180px;
+    width: @width-180;
     max-height: 140px;
     resize: vertical;
     padding: 1px;
     margin: 0;
   }
 
+  table {
+    border-collapse: separate;
+  }
+
   td {
     vertical-align: top;
+    margin-right: 10px;
   }
 }

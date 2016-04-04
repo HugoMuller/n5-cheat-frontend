@@ -1,4 +1,25 @@
+@import 'variables';
+
 html,
 body {
-  background-color: #404040;
+  background-color: @gray;
+}
+
+.content{
+  margin: 0 10px;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  color: black;
+}
+
+select {
+  @border-width: 2px;
+  @padding-top: 1px;
+  padding: @padding-top 0;
+  height: 20px + 2 * (@border-width + @padding-top);
 }

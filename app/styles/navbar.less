@@ -1,0 +1,32 @@
+@import 'variables';
+
+.navbar-dark {
+  .darker();
+  border-color: @dark-dark-gray;
+
+  ul,
+  li,
+  a {
+    .darker();
+  }
+
+  .dropdown{
+    a:hover {
+      .darker-hover();
+    }
+
+    &.open {
+      .dropdown-toggle {
+        .darker-hover();
+      }
+    }
+  }
+
+  .divider {
+    background-color: @dark-dark-gray;
+  }
+
+  .dropdown-menu {
+    border-color: @dark-dark-gray;
+  }
+}

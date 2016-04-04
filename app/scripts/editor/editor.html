@@ -1,5 +1,5 @@
-<div>
-  <div class="editor-left">
+<div class="row">
+  <div class="editor-left col-md-6">
     <div class="fieldset dark">
       <div class="fieldset-legend">Game Information</div>
 
@@ -17,22 +17,22 @@
     <div class="fieldset dark">
       <div class="fieldset-legend">Version</div>
 
-      <div class="fieldset-content">
-        CRC<sup>*</sup>:&nbsp;
+      <div class="fieldset-content row">
+        <div class="col-md-6">CRC<sup>*</sup>:&nbsp;
         <input
           type="text"
           data-ng-model="vm.version.crc"
           placeholder="CRC" maxlength="8"
           pattern="[a-fA-F0-9]{8}"
-          required>
+          required/></div>
 
-        Title<sup>*</sup>:&nbsp;
+        <div class="col-md-6">Title<sup>*</sup>:&nbsp;
         <input
           type="text"
           data-ng-model="vm.version.title"
           placeholder="Ex.: (USA) (SGB Enhanced)"
           maxlength="50"
-          required/>
+          required/></div>
       </div>
     </div>
 
@@ -49,7 +49,7 @@
     </div>
   </div>
 
-  <div class="editor-right">
+  <div class="editor-right col-md-6">
     <div class="fieldset dark">
       <div class="fieldset-legend">XML state</div>
 

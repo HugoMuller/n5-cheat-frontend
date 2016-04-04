@@ -1,24 +1,24 @@
 <div class="cheat fieldset">
   <div class="fieldset-legend">Cheat #{{cheat.computeCheatId()}} <a class="btn btn-remove" href="#/" data-ng-click="removeCheat()">remove</a></div>
 
-  <table class="fieldset-content">
-    <tr>
-      <td>Format<sup>*</sup>:&nbsp;</td>
-      <td>
+  <div class="fieldset-content">
+    <div class="row">
+      <div class="col-md-1">Format<sup>*</sup>:&nbsp;</div>
+      <div class="col-md-4">
         <select
           data-ng-init="cheat.format = formats[0]"
           data-ng-model="cheat.format"
           data-ng-options="format for format in formats">
         </select>
-      </td>
-      <td>Hacker:&nbsp;</td>
-      <td><input type="text" data-ng-model="cheat.hacker" maxlength="50"></td>
-    </tr>
-    <tr>
-      <td>Name<sup>*</sup>:&nbsp;</td>
-      <td><input type="text" data-ng-model="cheat.name" maxlength="50" required/></td>
-      <td>Code<sup>*</sup>:&nbsp;</td>
-      <td><textarea data-ng-model="cheat.code" placeholder="{{codePlaceHolder()}}" required></textarea></td>
-    </tr>
-  </table>
+      </div>
+      <div class="col-md-1">Hacker:&nbsp;</div>
+      <div class="col-md-4"><input type="text" data-ng-model="cheat.hacker" maxlength="50"></div>
+    </div>
+    <div class="row mt5">
+      <div class="col-md-1">Name<sup>*</sup>:&nbsp;</div>
+      <div class="col-md-4"><input type="text" data-ng-model="cheat.name" maxlength="50" required/></div>
+      <div class="col-md-1">Code<sup>*</sup>:&nbsp;</div>
+      <div class="col-md-4"><textarea data-ng-model="cheat.code" placeholder="{{codePlaceHolder()}}" required></textarea></div>
+    </div>
+  </div>
 </div>
