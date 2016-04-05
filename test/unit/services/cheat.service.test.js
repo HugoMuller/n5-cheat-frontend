@@ -3,15 +3,15 @@
 
   let cheatService;
 
-  describe('Cheat Service', suite);
-
-  function suite(){
+  describe('Cheat Service', () => {
     beforeEach(loadModule);
     beforeEach(injectThings);
 
     it('it should return a cheat object', initTest);
     it('it should format a cheat code correctly', formattedCodeTest);
-  }
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
 
   function initTest(){
     const cheats = [];

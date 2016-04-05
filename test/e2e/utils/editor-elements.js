@@ -63,7 +63,7 @@ function getMoreCheatsButton(){
 // cheats
 
 function getCheatElementList(){
-  return getCheatsContainer().$$('div[cheat]');
+  return getCheatsContainer().$$('cheat');
 }
 
 function getCheatElement(id){
@@ -75,19 +75,19 @@ function getCheatElementLegend(id){
 }
 
 function getCheatFormat(id){
-  return getCheatElement(id).element(by.model('cheat.format'));
+  return getCheatElement(id).element(by.model('vm.cheat.format'));
 }
 
 function getCheatHacker(id){
-  return getCheatElement(id).element(by.model('cheat.hacker'));
+  return getCheatElement(id).element(by.model('vm.cheat.hacker'));
 }
 
 function getCheatName(id){
-  return getCheatElement(id).element(by.model('cheat.name'));
+  return getCheatElement(id).element(by.model('vm.cheat.name'));
 }
 
 function getCheatCode(id){
-  return getCheatElement(id).element(by.model('cheat.code'));
+  return getCheatElement(id).element(by.model('vm.cheat.code'));
 }
 
 function getCheatElementWrapper(id){
@@ -105,7 +105,7 @@ function getCheatElementWrapper(id){
 
   function attr(model){
     return (value) => {
-      const input = wrapper.element.element(by.model(`cheat.${model}`));
+      const input = wrapper.element.element(by.model(`vm.cheat.${model}`));
       if(value !== null && value !== undefined){
         input.clear().sendKeys(value);
         return wrapper;
@@ -116,7 +116,7 @@ function getCheatElementWrapper(id){
 
   function ddl(model){
     return (value) => {
-      const input = wrapper.element.element(by.model(`cheat.${model}`));
+      const input = wrapper.element.element(by.model(`vm.cheat.${model}`));
       if(value !== null && value !== undefined){
         input.$(`option[label="${value}"]`).click();
         return wrapper;

@@ -1,24 +1,24 @@
 <div class="cheat fieldset">
-  <div class="fieldset-legend">Cheat #{{cheat.computeCheatId()}} <a class="btn btn-remove" href="#/" data-ng-click="removeCheat()">remove</a></div>
+  <div class="fieldset-legend">Cheat #{{vm.cheat.computeCheatId()}} <a class="btn btn-remove" href="#/" data-ng-click="vm.removeCheat()">remove</a></div>
 
   <div class="fieldset-content">
     <div class="row">
       <div class="col-md-1">Format<sup>*</sup>:&nbsp;</div>
       <div class="col-md-4">
         <select
-          data-ng-init="cheat.format = formats[0]"
-          data-ng-model="cheat.format"
-          data-ng-options="format for format in formats">
+          data-ng-init="vm.cheat.format = vm.formats[0]"
+          data-ng-model="vm.cheat.format"
+          data-ng-options="format for format in vm.formats">
         </select>
       </div>
       <div class="col-md-1">Hacker:&nbsp;</div>
-      <div class="col-md-4"><input type="text" data-ng-model="cheat.hacker" maxlength="50"></div>
+      <div class="col-md-4"><input type="text" data-ng-model="vm.cheat.hacker" maxlength="50"></div>
     </div>
     <div class="row mt5">
       <div class="col-md-1">Name<sup>*</sup>:&nbsp;</div>
-      <div class="col-md-4"><input type="text" data-ng-model="cheat.name" maxlength="50" required/></div>
+      <div class="col-md-4"><input type="text" data-ng-model="vm.cheat.name" maxlength="50" required/></div>
       <div class="col-md-1">Code<sup>*</sup>:&nbsp;</div>
-      <div class="col-md-4"><textarea data-ng-model="cheat.code" placeholder="{{codePlaceHolder()}}" required></textarea></div>
+      <div class="col-md-4"><textarea data-ng-model="vm.cheat.code" placeholder="{{vm.codePlaceHolder()}}" required></textarea></div>
     </div>
   </div>
 </div>

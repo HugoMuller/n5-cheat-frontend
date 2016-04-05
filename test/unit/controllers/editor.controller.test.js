@@ -9,29 +9,55 @@
   let validCheatsFilter;
   let ENV;
 
-  describe('Editor Controller', suite);
-
-  function suite(){
+  describe('Editor Controller', () => {
     beforeEach(loadModule);
     beforeEach(mock);
     beforeEach(injectThings);
 
-    describe('init', initSuite);
-    describe('.addCheat', addCheatSuite);
-    describe('.removeCheat', removeCheatSuite);
-    describe('.countCheats', countCheatsSuite);
-    describe('.getCodePlaceHolder', getCodePlaceHolderSuite);
-    describe('.showXml', showXmlSuite);
-    describe('.hasGameTitle', hasGameTitleSuite);
-    describe('.hasVersionCrc', hasVersionCrcSuite);
-    describe('.hasVersionTitle', hasVersionTitleSuite);
-  }
+    describe('init', () => {
+      it('should init the controller', initTest);
+    });
+
+    describe('.addCheat', () => {
+      beforeEach(initDOM);
+      it('should add a cheat', addCheatTest);
+    });
+
+    describe('.removeCheat', () => {
+      beforeEach(initDOM);
+      it('should remove a cheat', removeCheatTest);
+    });
+
+    describe('.countCheats', () => {
+      it('should count cheats', countCheatsTest);
+    });
+
+    describe('.getCodePlaceHolder', () => {
+      it('should return the correct placeHolder', getCodePlaceHolderTest);
+    });
+
+    describe('.showXml', () => {
+      it('should return true', showXmlTruthyTest);
+      it('should return false', showXmlFalsyTest);
+    });
+
+    describe('.hasGameTitle', () => {
+      it('should return true', hasGameTitleTruthyTest);
+      it('should return false', hasGameTitleFalsyTest);
+    });
+
+    describe('.hasVersionCrc', () => {
+      it('should return true', hasVersionCrcTruthyTest);
+      it('should return false', hasVersionCrcFalsyTest);
+    });
+
+    describe('.hasVersionTitle', () => {
+      it('should return true', hasVersionTitleTruthyTest);
+      it('should return false', hasVersionTitleFalsyTest);
+    });
+  });
 
   //////////////////////////////////////////////////////////////////////////////
-
-  function initSuite(){
-    it('should init the controller', initTest);
-  }
 
   function initTest(){
     controller = createWithParams();
@@ -68,12 +94,6 @@
 
   //////////////////////////////////////////////////////////////////////////////
 
-  function addCheatSuite(){
-    beforeEach(initDOM);
-
-    it('should add a cheat', addCheatTest);
-  }
-
   function addCheatTest(){
     controller = createWithParams();
     should(controller.cheats.length).equal(0);
@@ -87,12 +107,6 @@
   }
 
   //////////////////////////////////////////////////////////////////////////////
-
-  function removeCheatSuite(){
-    beforeEach(initDOM);
-
-    it('should remove a cheat', removeCheatTest);
-  }
 
   function removeCheatTest(){
     controller = createWithParams({
@@ -109,11 +123,11 @@
     should(getCheatElemCount()).equal(0);
 
     function addFakeCheatInDOM(){
-      const cheat = $compile(`<div cheat="vm.cheats[0]"
+      const cheat = $compile(`<cheat cheat="vm.cheats[0]"
         id="cheat-0"
         formats="vm.availableFormats"
-        removecheat="vm.removeCheat(0)"
-        codeplaceholder="vm.getCodePlaceHolder(0)"></div>`)($scope);
+        remove-cheat="vm.removeCheat(0)"
+        code-place-holder="vm.getCodePlaceHolder(0)"></cheat>`)($scope);
       $scope.$digest();
 
       angular
@@ -123,10 +137,6 @@
   }
 
   //////////////////////////////////////////////////////////////////////////////
-
-  function countCheatsSuite(){
-    it('should count cheats', countCheatsTest);
-  }
 
   function countCheatsTest(){
     controller = createWithParams();
@@ -142,10 +152,6 @@
   }
 
   //////////////////////////////////////////////////////////////////////////////
-
-  function getCodePlaceHolderSuite(){
-    it('should return the correct placeHolder', getCodePlaceHolderTest);
-  }
 
   function getCodePlaceHolderTest(){
     controller = createWithParams();
@@ -165,11 +171,6 @@
   }
 
   //////////////////////////////////////////////////////////////////////////////
-
-  function showXmlSuite(){
-    it('should return true', showXmlTruthyTest);
-    it('should return false', showXmlFalsyTest);
-  }
 
   function showXmlTruthyTest(){
     const stubs = {
@@ -201,11 +202,6 @@
 
   //////////////////////////////////////////////////////////////////////////////
 
-  function hasGameTitleSuite(){
-    it('should return true', hasGameTitleTruthyTest);
-    it('should return false', hasGameTitleFalsyTest);
-  }
-
   function hasGameTitleTruthyTest(){
     controller = createWithParams({
       game: {
@@ -221,11 +217,6 @@
   }
 
   //////////////////////////////////////////////////////////////////////////////
-
-  function hasVersionCrcSuite(){
-    it('should return true', hasVersionCrcTruthyTest);
-    it('should return false', hasVersionCrcFalsyTest);
-  }
 
   function hasVersionCrcTruthyTest(){
     controller = createWithParams();
@@ -263,11 +254,6 @@
   }
 
   //////////////////////////////////////////////////////////////////////////////
-
-  function hasVersionTitleSuite(){
-    it('should return true', hasVersionTitleTruthyTest);
-    it('should return false', hasVersionTitleFalsyTest);
-  }
 
   function hasVersionTitleTruthyTest(){
     controller = createWithParams({
@@ -330,7 +316,7 @@
 
   function createWithParams(params){
     params = params || {};
-    const _controller =  $controller('EditorCtrl', { $scope });
+    const _controller = $controller('EditorCtrl', { $scope });
 
     for(const p in params){
       if(params.hasOwnProperty(p)){
@@ -351,7 +337,7 @@
 
   function getCheatElemCount(){
     return angular
-      .element(document.querySelectorAll('#cheats-container div[cheat]'))
+      .element(document.querySelectorAll('#cheats-container cheat'))
       .length;
   }
 })();

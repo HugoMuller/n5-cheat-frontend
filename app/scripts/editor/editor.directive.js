@@ -18,6 +18,8 @@
     };
   }
 
+  //////////////////////////////////////////////////////////////////////////////
+
   EditorCtrl.$inject = ['$scope', '$compile', 'cheatService', 'ENV', 'validCheatsFilter'];
 
   function EditorCtrl($scope, $compile, cheatService, ENV, validCheatsFilter){
@@ -40,11 +42,11 @@
       const id = vm.cheats.length;
       vm.cheats.push(cheatService(vm.cheats));
 
-      const elem = `<div cheat="vm.cheats[${id}]"
+      const elem = `<cheat cheat="vm.cheats[${id}]"
         id="cheat-${id}"
         formats="vm.availableFormats"
-        removecheat="vm.removeCheat(${id})"
-        codeplaceholder="vm.getCodePlaceHolder(${id})"></div>`;
+        remove-cheat="vm.removeCheat(${id})"
+        code-place-holder="vm.getCodePlaceHolder(${id})"></cheat>`;
       const cheatElem = $compile(angular.element(elem))($scope);
 
       angular

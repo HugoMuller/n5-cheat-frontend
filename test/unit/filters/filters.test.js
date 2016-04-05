@@ -5,22 +5,21 @@
   let validCheatsFilter;
   let ENV;
 
-  describe('Filters', suite);
-
-  function suite(){
+  describe('Filters', () => {
     beforeEach(loadModule);
     beforeEach(injectThings);
 
-    describe('Format Code', formatCodeSuite);
-    describe('Valid Cheats', validCheatsSuite);
-  }
+    describe('Format Code', () => {
+      it('should format a code with the given format', formatCodeTest);
+      it('should not format a code if unknown format', noFormatCodeTest);
+    });
+
+    describe('Valid Cheats', () => {
+      it('should return an array of valid cheats', cheatValidTest);
+    });
+  });
 
   //////////////////////////////////////////////////////////////////////////////
-
-  function formatCodeSuite(){
-    it('should format a code with the given format', formatCodeTest);
-    it('should not format a code if unknown format', noFormatCodeTest);
-  }
 
   function formatCodeTest(){
     const codes = [
@@ -63,10 +62,6 @@
   }
 
   //////////////////////////////////////////////////////////////////////////////
-
-  function validCheatsSuite(){
-    it('should return an array of valid cheats', cheatValidTest);
-  }
 
   function cheatValidTest(){
     const validCheat = fakeCheat('format', 'name', true);
