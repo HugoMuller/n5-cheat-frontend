@@ -4,19 +4,11 @@
   angular
     .module('n5cheat.editor')
     .controller('EditorCtrl', EditorCtrl)
-    .directive('editor', Editor);
-
-  Editor.$inject = [];
-
-  function Editor(){
-    return {
-      restrict: 'E',
+    .component('editor', {
       templateUrl: 'scripts/editor/editor.html',
-      scope: true,
-      controller: EditorCtrl,
-      controllerAs: 'vm'
-    };
-  }
+      controller: 'EditorCtrl as vm',
+      bindings: {}
+    });
 
   //////////////////////////////////////////////////////////////////////////////
 
@@ -39,10 +31,10 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function addCheat(){
-      const id = vm.cheats.length;
-      vm.cheats.push(cheatService(vm.cheats));
+      const id = vm.content.cheats.length;
+      vm.content.cheats.push(cheatService(vm.content.cheats));
 
-      const elem = `<cheat cheat="vm.cheats[${id}]"
+      const elem = `<cheat cheat="vm.content.cheats[${id}]"
         id="cheat-${id}"
         formats="vm.availableFormats"
         remove-cheat="vm.removeCheat(${id})"
@@ -58,15 +50,15 @@
       angular
         .element(document.querySelector(`#cheat-${id}`))
         .remove();
-      delete vm.cheats[id];
+      delete vm.content.cheats[id];
     }
 
     function countCheats(){
-      return validCheatsFilter(vm.cheats).length;
+      return validCheatsFilter(vm.content.cheats).length;
     }
 
     function getCodePlaceHolder(id){
-      const cheat = vm.cheats[id];
+      const cheat = vm.content.cheats[id];
       return cheat ? vm.codePlaceHolders[cheat.format] : '';
     }
 
@@ -82,27 +74,29 @@
         [ENV.codeFormat.GameShark]: '0123ABCD',
         [ENV.codeFormat.GameGenie]: '0123:AB'
       };
-      vm.game = {
-        title: ''
+      vm.content = {
+        game: {
+          title: ''
+        },
+        version: {
+          crc: '',
+          codeCount: 0,
+          title: ''
+        },
+        cheats: []
       };
-      vm.version = {
-        crc: '',
-        codeCount: 0,
-        title: ''
-      };
-      vm.cheats = [];
     }
 
     function hasGameTitle(){
-      return !!vm.game.title;
+      return !!vm.content.game.title;
     }
 
     function hasVersionCrc(){
-      return !!vm.version.crc && /^[a-fA-F0-9]{8}$/.test(vm.version.crc);
+      return /^[a-fA-F0-9]{8}$/.test(vm.content.version.crc);
     }
 
     function hasVersionTitle(){
-      return !!vm.version.title;
+      return !!vm.content.version.title;
     }
   }
 })();

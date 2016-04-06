@@ -69,16 +69,16 @@
     should(controller.codePlaceHolders[ENV.codeFormat.GameShark]).not.be.undefined();
     should(controller.codePlaceHolders[ENV.codeFormat.GameGenie]).not.be.undefined();
 
-    should(controller.game).not.be.undefined();
-    should(controller.game.title).equal('');
+    should(controller.content.game).not.be.undefined();
+    should(controller.content.game.title).equal('');
 
-    should(controller.version).not.be.undefined();
-    should(controller.version.crc).equal('');
-    should(controller.version.codeCount).equal(0);
-    should(controller.version.title).equal('');
+    should(controller.content.version).not.be.undefined();
+    should(controller.content.version.crc).equal('');
+    should(controller.content.version.codeCount).equal(0);
+    should(controller.content.version.title).equal('');
 
-    should(controller.cheats).not.be.undefined();
-    should(controller.cheats.length).equal(0);
+    should(controller.content.cheats).not.be.undefined();
+    should(controller.content.cheats.length).equal(0);
 
     [
       'addCheat',
@@ -96,12 +96,12 @@
 
   function addCheatTest(){
     controller = createWithParams();
-    should(controller.cheats.length).equal(0);
+    should(controller.content.cheats.length).equal(0);
     should(getCheatElemCount()).equal(0);
 
     for(let i=1; i<5; i++){
       controller.addCheat();
-      should(controller.cheats.length).equal(i);
+      should(controller.content.cheats.length).equal(i);
       should(getCheatElemCount()).equal(i);
     }
   }
@@ -110,20 +110,22 @@
 
   function removeCheatTest(){
     controller = createWithParams({
-      cheats: [cheatService()]
+      content: {
+        cheats: [cheatService()]
+      }
     });
     addFakeCheatInDOM();
 
-    should(controller.cheats.length).equal(1);
+    should(controller.content.cheats.length).equal(1);
     should(getCheatElemCount()).equal(1);
 
     controller.removeCheat(0);
 
-    should(controller.cheats[0]).be.undefined();
+    should(controller.content.cheats[0]).be.undefined();
     should(getCheatElemCount()).equal(0);
 
     function addFakeCheatInDOM(){
-      const cheat = $compile(`<cheat cheat="vm.cheats[0]"
+      const cheat = $compile(`<cheat cheat="vm.content.cheats[0]"
         id="cheat-0"
         formats="vm.availableFormats"
         remove-cheat="vm.removeCheat(0)"
@@ -156,16 +158,16 @@
   function getCodePlaceHolderTest(){
     controller = createWithParams();
 
-    controller.cheats[0] = undefined;
+    controller.content.cheats[0] = undefined;
     should(controller.getCodePlaceHolder(0)).equal('');
 
-    controller.cheats[0] = { format: ENV.codeFormat.GameShark };
+    controller.content.cheats[0] = { format: ENV.codeFormat.GameShark };
     should(controller.getCodePlaceHolder(0)).match(/^[A-Fa-f0-9:]+$/);
 
-    controller.cheats[0].format = ENV.codeFormat.GameGenie;
+    controller.content.cheats[0].format = ENV.codeFormat.GameGenie;
     should(controller.getCodePlaceHolder(0)).match(/^[A-Fa-f0-9:]+$/);
 
-    controller.cheats[0].format = 'some unknown format';
+    controller.content.cheats[0].format = 'some unknown format';
     should(controller.getCodePlaceHolder(0)).be.undefined();
 
   }
@@ -204,8 +206,10 @@
 
   function hasGameTitleTruthyTest(){
     controller = createWithParams({
-      game: {
-        title: 'title'
+      content: {
+        game: {
+          title: 'title'
+        }
       }
     });
     should(controller.hasGameTitle()).be.true();
@@ -248,7 +252,7 @@
 
   function crcShouldBe(trueOrFalse){
     return (crc) => {
-      controller.version.crc = crc;
+      controller.content.version.crc = crc;
       should(controller.hasVersionCrc()).equal(trueOrFalse);
     };
   }
@@ -257,8 +261,10 @@
 
   function hasVersionTitleTruthyTest(){
     controller = createWithParams({
-      version: {
-        title: 'title'
+      content: {
+        version: {
+          title: 'title'
+        }
       }
     });
     should(controller.hasVersionTitle()).be.true();

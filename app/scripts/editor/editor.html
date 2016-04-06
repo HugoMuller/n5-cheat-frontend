@@ -6,7 +6,7 @@
       <div class="fieldset-content">
         Title<sup>*</sup>:&nbsp;
         <input type="text"
-               data-ng-model="vm.game.title"
+               data-ng-model="vm.content.game.title"
                placeholder="title"
                maxlength="50"
                required/>
@@ -21,7 +21,7 @@
         <div class="col-md-6">CRC<sup>*</sup>:&nbsp;
         <input
           type="text"
-          data-ng-model="vm.version.crc"
+          data-ng-model="vm.content.version.crc"
           placeholder="CRC" maxlength="8"
           pattern="[a-fA-F0-9]{8}"
           required/></div>
@@ -29,7 +29,7 @@
         <div class="col-md-6">Title<sup>*</sup>:&nbsp;
         <input
           type="text"
-          data-ng-model="vm.version.title"
+          data-ng-model="vm.content.version.title"
           placeholder="Ex.: (USA) (SGB Enhanced)"
           maxlength="50"
           required/></div>
@@ -72,7 +72,10 @@
 
     <div class="fieldset dark">
       <div class="fieldset-legend">XML compiled</div>
-      <div xml-code class="xml-editor fieldset-content"></div>
+      <xml-code class="xml-editor fieldset-content"
+        content="vm.content"
+        count-cheats="vm.countCheats()">
+      </xml-code>
     </div>
   </div>
 </div>

@@ -2,7 +2,7 @@
   <span class="xml-tag">&lt;game</span>
   <span>&nbsp;</span>
   <span class="xml-attr">title=</span>
-  <span class="xml-attr-value">"{{vm.game.title}}"</span>
+  <span class="xml-attr-value">"{{vm.content.game.title}}"</span>
   <span class="xml-tag">&gt;</span>
 </span>
 
@@ -11,17 +11,17 @@
   <span class="xml-tag">&lt;version</span>
   <span>&nbsp;</span>
   <span class="xml-attr">CRC=</span>
-  <span class="xml-attr-value">"{{vm.version.crc.toUpperCase()}}"</span>
+  <span class="xml-attr-value">"{{vm.content.version.crc.toUpperCase()}}"</span>
   <span>&nbsp;</span>
   <span class="xml-attr">codeCount=</span>
   <span class="xml-attr-value">"{{vm.countCheats()}}"</span>
   <span>&nbsp;</span>
   <span class="xml-attr">title=</span>
-  <span class="xml-attr-value">"{{vm.version.title}}"</span>
+  <span class="xml-attr-value">"{{vm.content.version.title}}"</span>
   <span class="xml-tag">&gt;</span>
 </span>
 
-<span class="xml-line" data-ng-repeat="cheat in vm.cheats | validCheats">
+<span class="xml-line" data-ng-repeat="cheat in vm.content.cheats | validCheats">
   <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
   <span class="xml-tag">&lt;cheat</span>
   <span>&nbsp;</span>

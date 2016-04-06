@@ -40,15 +40,15 @@ function getEditorLeft(){
 }
 
 function getInputGameTitle(){
-  return getEditorLeft().element(by.model('vm.game.title'));
+  return getEditorLeft().element(by.model('vm.content.game.title'));
 }
 
 function getInputVersionCrc(){
-  return getEditorLeft().element(by.model('vm.version.crc'));
+  return getEditorLeft().element(by.model('vm.content.version.crc'));
 }
 
 function getInputVersionTitle(){
-  return getEditorLeft().element(by.model('vm.version.title'));
+  return getEditorLeft().element(by.model('vm.content.version.title'));
 }
 
 function getCheatsContainer(){
@@ -151,15 +151,15 @@ function getXmlInfoSuccessContainer(){
 ///////////////////////////////////////////////////////////////////////////
 // xml
 function getXmlCompiledContainer(){
-  return getEditorRight().$('div.xml-editor.fieldset-content');
+  return getEditorRight().$('xml-code.xml-editor.fieldset-content');
 }
 
 function getXmlGameTitle(){
-  return getXmlCompiledContainer().element(by.exactBinding('vm.game.title'));
+  return getXmlCompiledContainer().element(by.exactBinding('vm.content.game.title'));
 }
 
 function getXmlVersionCrc(){
-  return getXmlCompiledContainer().element(by.exactBinding('vm.version.crc.toUpperCase()'));
+  return getXmlCompiledContainer().element(by.exactBinding('vm.content.version.crc.toUpperCase()'));
 }
 
 function getXmlCheatCount(){
@@ -167,15 +167,15 @@ function getXmlCheatCount(){
 }
 
 function getXmlVersionTitle(){
-  return getXmlCompiledContainer().element(by.exactBinding('vm.version.title'));
+  return getXmlCompiledContainer().element(by.exactBinding('vm.content.version.title'));
 }
 
 function getXmlCheatLines(){
-  return getXmlCompiledContainer().all(by.repeater('cheat in vm.cheats | validCheats'));
+  return getXmlCompiledContainer().all(by.repeater('cheat in vm.content.cheats | validCheats'));
 }
 
 function getXmlCheatLine(id){
-  return getXmlCompiledContainer().element(by.repeater('cheat in vm.cheats | validCheats').row(id));
+  return getXmlCompiledContainer().element(by.repeater('cheat in vm.content.cheats | validCheats').row(id));
 }
 
 function getXmlCheatWrapper(id){
