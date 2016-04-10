@@ -61,11 +61,9 @@
   "scripts": {
     "start": "gulp serve",
     "postinstall": "bower install",
-
     "test": "karma start test/unit/config/karma-dev.conf.js",
     "test-single-run": "karma start test/unit/config/karma-dev.conf.js --single-run",
     "ci-test": "karma start test/unit/config/karma-ci.conf.js --single-run",
-
     "preupdate-webdriver": "npm install",
     "update-webdriver": "webdriver-manager update --standalone",
     "preprotractor": "npm run update-webdriver",
@@ -73,12 +71,10 @@
     "test-e2e": "protractor test/e2e/config/protractor.conf.js",
     "ci-protractor-chrome": "protractor test/e2e/config/ci-protractor-chrome.conf.js",
     "ci-protractor-firefox": "protractor test/e2e/config/ci-protractor-firefox.conf.js",
-
     "preci-jshint": "mkdir -p reports",
     "ci-jshint": "eslint -f jslint-xml -o reports/jshint.xml app test *.js || true",
     "preci-cpd": "mkdir -p reports",
     "ci-cpd": "jscpd --output reports/cpd.xml",
-
     "clean": "rm -rf bower_components node_modules reports",
     "clean-app": "rm -rf app/bower_components",
     "clean-all": "rm -rf bower_components node_modules reports app/bower_components"

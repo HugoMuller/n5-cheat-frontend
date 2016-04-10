@@ -12,15 +12,15 @@
 
   //////////////////////////////////////////////////////////////////////////////
 
-  EditorCtrl.$inject = ['$scope', '$compile', 'cheatService', 'ENV', 'validCheatsFilter'];
+  EditorCtrl.$inject = ['$scope', '$compile', 'cheatService', 'validCheatsFilter', 'ENV'];
 
-  function EditorCtrl($scope, $compile, cheatService, ENV, validCheatsFilter){
+  function EditorCtrl($scope, $compile, cheatService, validCheatsFilter, ENV){
     const vm = this;
 
     vm.addCheat = addCheat;
     vm.removeCheat = removeCheat;
     vm.countCheats = countCheats;
-    vm.getCodePlaceHolder = getCodePlaceHolder;
+    vm.getAvailableFormats = getAvailableFormats;
     vm.showXml = showXml;
     vm.hasGameTitle = hasGameTitle;
     vm.hasVersionCrc = hasVersionCrc;
@@ -34,11 +34,10 @@
       const id = vm.content.cheats.length;
       vm.content.cheats.push(cheatService(vm.content.cheats));
 
-      const elem = `<cheat cheat="vm.content.cheats[${id}]"
-        id="cheat-${id}"
+      const elem = `<cheat id="cheat-${id}"
+        cheat="vm.content.cheats[${id}]"
         formats="vm.availableFormats"
-        remove-cheat="vm.removeCheat(${id})"
-        code-place-holder="vm.getCodePlaceHolder(${id})"></cheat>`;
+        remove-cheat="vm.removeCheat(${id})"></cheat>`;
       const cheatElem = $compile(angular.element(elem))($scope);
 
       angular
@@ -57,34 +56,12 @@
       return validCheatsFilter(vm.content.cheats).length;
     }
 
-    function getCodePlaceHolder(id){
-      const cheat = vm.content.cheats[id];
-      return cheat ? vm.codePlaceHolders[cheat.format] : '';
+    function getAvailableFormats(){
+      vm.availableFormats = ENV.codeFormats[vm.content.console];
     }
 
     function showXml(){
       return vm.hasGameTitle() && vm.hasVersionCrc() && vm.hasVersionTitle() && vm.countCheats() > 0;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////
-
-    function init(){
-      vm.availableFormats = [ENV.codeFormat.GameShark, ENV.codeFormat.GameGenie];
-      vm.codePlaceHolders = {
-        [ENV.codeFormat.GameShark]: '0123ABCD',
-        [ENV.codeFormat.GameGenie]: '0123:AB'
-      };
-      vm.content = {
-        game: {
-          title: ''
-        },
-        version: {
-          crc: '',
-          codeCount: 0,
-          title: ''
-        },
-        cheats: []
-      };
     }
 
     function hasGameTitle(){
@@ -97,6 +74,27 @@
 
     function hasVersionTitle(){
       return !!vm.content.version.title;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+
+    function init(){
+      vm.consoles = ENV.consoles;
+
+      vm.content = {
+        game: {
+          title: ''
+        },
+        cheats: [],
+        console: ENV.defaults.console,
+        version: {
+          crc: '',
+          codeCount: 0,
+          title: ''
+        },
+      };
+
+      getAvailableFormats();
     }
   }
 })();

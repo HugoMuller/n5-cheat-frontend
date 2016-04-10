@@ -8,8 +8,11 @@
   function validCheats(){
     return function(cheats){
       return cheats.filter(
-        (cheat) => cheat && cheat.format && cheat.name
-          && typeof cheat.sanitizedCode === 'function' && cheat.sanitizedCode()
+        (cheat) => cheat
+          && cheat.format
+          && cheat.name
+          && typeof cheat.sanitizedCode === 'function'
+          && cheat.sanitizedCode()
       );
     };
   }

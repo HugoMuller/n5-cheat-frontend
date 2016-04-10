@@ -3,13 +3,23 @@
     <div class="fieldset dark">
       <div class="fieldset-legend">Game Information</div>
 
-      <div class="fieldset-content">
-        Title<sup>*</sup>:&nbsp;
-        <input type="text"
-               data-ng-model="vm.content.game.title"
-               placeholder="title"
-               maxlength="50"
-               required/>
+      <div class="fieldset-content row">
+        <div class="col-md-6">Title<sup>*</sup>:&nbsp;
+          <input
+            type="text"
+            data-ng-model="vm.content.game.title"
+            placeholder="title"
+            maxlength="50"
+            required/>
+        </div>
+
+        <div class="col-md-6">Console<sup>*</sup>:&nbsp;
+          <select
+            data-ng-model="vm.content.console"
+            data-ng-options="key as console for (key, console) in vm.consoles"
+            data-ng-change="vm.getAvailableFormats()">
+          </select>
+        </div>
       </div>
 
     </div>
@@ -19,20 +29,22 @@
 
       <div class="fieldset-content row">
         <div class="col-md-6">CRC<sup>*</sup>:&nbsp;
-        <input
-          type="text"
-          data-ng-model="vm.content.version.crc"
-          placeholder="CRC" maxlength="8"
-          pattern="[a-fA-F0-9]{8}"
-          required/></div>
+          <input
+            type="text"
+            data-ng-model="vm.content.version.crc"
+            placeholder="CRC" maxlength="8"
+            pattern="[a-fA-F0-9]{8}"
+            required/>
+        </div>
 
         <div class="col-md-6">Title<sup>*</sup>:&nbsp;
-        <input
-          type="text"
-          data-ng-model="vm.content.version.title"
-          placeholder="Ex.: (USA) (SGB Enhanced)"
-          maxlength="50"
-          required/></div>
+          <input
+            type="text"
+            data-ng-model="vm.content.version.title"
+            placeholder="Ex.: (USA) (SGB Enhanced)"
+            maxlength="50"
+            required/>
+        </div>
       </div>
     </div>
 

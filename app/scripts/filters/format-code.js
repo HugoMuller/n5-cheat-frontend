@@ -8,26 +8,37 @@
   formatCode.$inject = ['ENV'];
 
   function formatCode(ENV){
-    return function(code, format){
-      code = code || '';
-
-      let tokens;
-      const res = code
+    return function(code, format, console){
+      code = (code || '')
         .replace(/[^A-Fa-f0-9]/g, '')
         .toUpperCase();
 
-      if(format === ENV.codeFormat.GameShark){
-        tokens = res.match(/.{8}/g) || [];
-      }else if(format === ENV.codeFormat.GameGenie){
-        tokens = [];
-        (res.match(/.{6}/g) || []).forEach((token) => {
-          tokens.push(token.match(/.{2,4}/g).join(':'));
-        });
-      }else{
-        return res;
-      }
+      const formatInfo = _.find(ENV.codeFormats[console], { format });
+      if(!formatInfo) return '';
 
-      return tokens.join(',');
+      return genericFormatter(code, formatInfo.tokens[0], formatInfo.tokens[1]);
     };
+  }
+
+  ///////////////////////////////////////////////////////////////////////////
+
+  function genericFormatter(code, length, remainder = 0){
+    const toks = code.match(new RegExp(`.{${length+remainder}}`, 'g')) || [];
+    let tokens;
+
+    if(remainder > 0){
+      tokens = [];
+      toks.forEach((token) => {
+        tokens.push(
+          token
+            .match(new RegExp(`.{${remainder},${length}}`, 'g'))
+            .join(':')
+        );
+      });
+    }else{
+      tokens = toks;
+    }
+
+    return tokens.join(',');
   }
 })();

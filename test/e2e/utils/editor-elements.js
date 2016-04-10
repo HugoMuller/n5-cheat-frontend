@@ -2,6 +2,7 @@
 
 module.exports = {
   getEditorLeft,
+  getDdlConsole,
   getInputGameTitle,
   getInputVersionCrc,
   getInputVersionTitle,
@@ -37,6 +38,10 @@ module.exports = {
 // left editor
 function getEditorLeft(){
   return browser.$('div.editor-left');
+}
+
+function getDdlConsole(){
+  return ddl('vm.content.console', getEditorLeft());
 }
 
 function getInputGameTitle(){
@@ -91,39 +96,16 @@ function getCheatCode(id){
 }
 
 function getCheatElementWrapper(id){
-  const wrapper = {
-    element: getCheatElement(id),
-    name: attr('name'),
-    hacker: attr('hacker'),
-    format: ddl('format'),
-    code: attr('code')
-  };
+  const wrapper = {};
+
+  wrapper.element = getCheatElement(id);
+  wrapper.name = attr('vm.cheat.name', wrapper, wrapper.element);
+  wrapper.hacker = attr('vm.cheat.hacker', wrapper, wrapper.element);
+  wrapper.format = ddl('vm.cheat.format', wrapper, wrapper.element);
+  wrapper.code = attr('vm.cheat.code', wrapper, wrapper.element);
+  wrapper.placeHolder = placeHolder('vm.cheat.code', wrapper.element);
 
   return wrapper;
-
-  //////////////////////////////////
-
-  function attr(model){
-    return (value) => {
-      const input = wrapper.element.element(by.model(`vm.cheat.${model}`));
-      if(value !== null && value !== undefined){
-        input.clear().sendKeys(value);
-        return wrapper;
-      }
-      return input.getAttribute('value');
-    };
-  }
-
-  function ddl(model){
-    return (value) => {
-      const input = wrapper.element.element(by.model(`vm.cheat.${model}`));
-      if(value !== null && value !== undefined){
-        input.$(`option[label="${value}"]`).click();
-        return wrapper;
-      }
-      return input.$('option:checked').getText();
-    };
-  }
 }
 
 function getCheatRemoveButton(id){
@@ -181,17 +163,49 @@ function getXmlCheatLine(id){
 function getXmlCheatWrapper(id){
   const wrapper = {
     element: getXmlCheatLine(id),
-    name: attr('name'),
-    hacker: attr("hacker || 'Unknown'"),
-    format: attr('format'),
-    code: attr('code | formatCode:cheat.format')
+    name: xmlAttr('cheat.name'),
+    hacker: xmlAttr("cheat.hacker || 'Unknown'"),
+    format: xmlAttr('cheat.format'),
+    code: xmlAttr('cheat.code | formatCode:cheat.format:vm.content.console')
   };
 
   return wrapper;
 
   //////////////////////////////////
 
-  function attr(binding){
-    return () => wrapper.element.element(by.exactBinding(`cheat.${binding}`)).getText();
+  function xmlAttr(binding){
+    return () => wrapper.element.element(by.exactBinding(`${binding}`)).getText();
   }
+}
+
+function attr(model, context, elementContext){
+  elementContext = elementContext || context;
+
+  return (value) => {
+    const input = elementContext.element(by.model(`${model}`));
+    if(value !== null && value !== undefined){
+      input.clear().sendKeys(value);
+      return context;
+    }
+    return input.getAttribute('value');
+  };
+}
+
+function ddl(model, context, elementContext){
+  elementContext = elementContext || context;
+
+  return (value) => {
+    const input = elementContext.element(by.model(`${model}`));
+    if(value !== null && value !== undefined){
+      input.$(`option[label="${value}"]`).click();
+      return context;
+    }
+    return input.$('option:checked').getText();
+  };
+}
+
+function placeHolder(model, context){
+  return () => context
+    .element(by.model(`${model}`))
+    .getAttribute('placeholder');
 }

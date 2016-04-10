@@ -3,6 +3,7 @@
 const elements = require('../utils/editor-elements.js');
 const expectation = require('../utils/expectation.js');
 
+const consoleDdl = elements.getDdlConsole();
 const cheatElementList = elements.getCheatElementList();
 const moreCheatButton = elements.getMoreCheatsButton();
 const xmlCheatCount = elements.getXmlCheatCount();
@@ -13,14 +14,16 @@ ABCDEFGHIJKLMNOPQRSTUVWXYZ
 012345679:0123 456 789:0,1&~#!`;
 const sampleCodeExpected = {
   GameShark: 'ABCDEFAB,CDEF0123,45679012,34567890',
-  'Game Genie': 'ABCD:EF,ABCD:EF,0123:45,6790:12,3456:78'
+  'Game Genie': 'ABCD:EF,ABCD:EF,0123:45,6790:12,3456:78',
+  Raw: 'ABCD:EF,ABCD:EF,0123:45,6790:12,3456:78'
 };
 
 module.exports = {
   addCheats,
   addOneCheat,
   removeCheats,
-  removeOneCheat
+  removeOneCheat,
+  consoleChanges
 };
 
 ///////////////////////////////////////////////////////////////////////////
@@ -38,6 +41,7 @@ function addOneCheat(){
   expect(elements.getXmlCheatLines().count()).toBe(0);
   expect(elements.getCheatElementLegend(0).getText()).toBe('Cheat #1 remove');
   expectation.expectCheat(cheat).toHave('', '', 'GameShark', '');
+  expect(cheat.placeHolder()).not.toBe('');
 
   testName();
   testHacker();
@@ -100,7 +104,6 @@ function addOneCheat(){
     cheat.format('Game Genie');
     expectation.expectCheat(cheat).toHave('some cheat', 'someone', 'Game Genie', sampleCode);
     expectation.expectCheat(xmlCheat).toHave('"some cheat"', '"someone"', '"Game Genie"', sampleCodeExpected['Game Genie']);
-
   }
   //////////////////////////////////
 
@@ -205,6 +208,8 @@ function addCheats(){
   expectation.expectCheat(xmlCheats[1]).toHave('"another cheat"', '"another guy"', '"Game Genie"', 'ABCD:EF');
 }
 
+///////////////////////////////////////////////////////////////////////////
+
 function removeCheats(){
   browser.get('/');
 
@@ -284,6 +289,47 @@ function removeCheats(){
     expect(elements.getCheatElementLegend(id).getText()).toBe(`Cheat #${id+1} remove`);
     expectation.expectCheat(xmlCheat(id)).toHave.apply(null, xmlCheatValues);
   }
+}
+
+///////////////////////////////////////////////////////////////////////////
+
+function consoleChanges(){
+  browser.get('/');
+
+  const expectValuesToBe = checkValuesOf(cheatElementList, xmlCheatCount, xmlErrorList);
+  const cheat = elements.getCheatElementWrapper(0);
+
+  expect(elements.getXmlCheatLines().count()).toBe(0);
+  moreCheatButton.click();
+  expect(elements.getXmlCheatLines().count()).toBe(0);
+  expect(elements.getCheatElementLegend(0).getText()).toBe('Cheat #1 remove');
+  expectation.expectCheat(cheat).toHave('', '', 'GameShark', '');
+
+  const oldPlaceHolder = cheat.placeHolder();
+  expect(oldPlaceHolder).not.toBe('');
+
+  cheat
+    .name('some cheat')
+    .hacker('someone')
+    .format('GameShark')
+    .code(sampleCode);
+
+  expectation.expectCheat(cheat).toHave('some cheat', 'someone', 'GameShark', sampleCode);
+  expectValuesToBe(1, '"1"', { not: 'No valid cheat codes' });
+  expect(elements.getXmlCheatLines().count()).toBe(1);
+
+  const xmlCheat = elements.getXmlCheatWrapper(0);
+  expectation.expectCheat(xmlCheat).toHave('"some cheat"', '"someone"', '"GameShark"', sampleCodeExpected.GameShark);
+
+  consoleDdl('NES');
+
+  expectation.expectCheat(cheat).toHave('some cheat', 'someone', 'Raw', sampleCode);
+  expectation.expectCheat(xmlCheat).toHave('"some cheat"', '"someone"', '"Raw"', sampleCodeExpected.Raw);
+
+  cheat.code('');
+
+  expect(cheat.placeHolder()).not.toBe('');
+  expect(cheat.placeHolder()).not.toBe(oldPlaceHolder);
 }
 
 ///////////////////////////////////////////////////////////////////////////

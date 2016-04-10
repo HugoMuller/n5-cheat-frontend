@@ -20,6 +20,7 @@ describe('Editor', () => {
     it('should remove one cheat', cheatTests.removeOneCheat);
     it('should add several cheats', cheatTests.addCheats);
     it('should remove several cheats', cheatTests.removeCheats);
+    it('should update code format when console changes', cheatTests.consoleChanges);
   });
 
   describe('well formed xml', () => {

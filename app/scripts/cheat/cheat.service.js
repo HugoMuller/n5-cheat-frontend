@@ -31,12 +31,12 @@
 
     ///////////////////////////////////////////////////////////////////////////
 
-      function computeCheatIdFromCheats(cheats){
+      function computeCheatIdFromCheats(_cheats){
         return function(){
           const id = that.id;
           let _id = 0;
 
-          cheats.some((cheat) => {
+          _cheats.some((cheat) => {
             if(!cheat) return false;
             _id++;
             return cheat.id === id;

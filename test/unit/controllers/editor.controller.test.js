@@ -32,8 +32,8 @@
       it('should count cheats', countCheatsTest);
     });
 
-    describe('.getCodePlaceHolder', () => {
-      it('should return the correct placeHolder', getCodePlaceHolderTest);
+    describe('.getAvailableFormats', () => {
+      it('should return the correct available formats', getAvailableFormatsTest);
     });
 
     describe('.showXml', () => {
@@ -62,12 +62,11 @@
   function initTest(){
     controller = createWithParams();
 
+    should(controller.consoles).not.be.undefined();
+    should(controller.consoles).eql(ENV.consoles);
+
     should(controller.availableFormats).not.be.undefined();
     should(controller.availableFormats.length).equal(2);
-
-    should(controller.codePlaceHolders).not.be.undefined();
-    should(controller.codePlaceHolders[ENV.codeFormat.GameShark]).not.be.undefined();
-    should(controller.codePlaceHolders[ENV.codeFormat.GameGenie]).not.be.undefined();
 
     should(controller.content.game).not.be.undefined();
     should(controller.content.game.title).equal('');
@@ -80,15 +79,18 @@
     should(controller.content.cheats).not.be.undefined();
     should(controller.content.cheats.length).equal(0);
 
+    should(controller.content.console).not.be.undefined();
+    should(controller.content.console).equal(ENV.defaults.console);
+
     [
       'addCheat',
+      'removeCheat',
       'countCheats',
-      'getCodePlaceHolder',
+      'getAvailableFormats',
+      'showXml',
       'hasGameTitle',
       'hasVersionCrc',
-      'hasVersionTitle',
-      'removeCheat',
-      'showXml'
+      'hasVersionTitle'
     ].forEach((fn) => should(controller[fn]).be.a.Function());
   }
 
@@ -114,7 +116,10 @@
         cheats: [cheatService()]
       }
     });
-    addFakeCheatInDOM();
+
+    angular
+      .element(document.querySelector('#cheats-container'))
+      .append('<cheat id="cheat-0"></cheat>');
 
     should(controller.content.cheats.length).equal(1);
     should(getCheatElemCount()).equal(1);
@@ -123,19 +128,6 @@
 
     should(controller.content.cheats[0]).be.undefined();
     should(getCheatElemCount()).equal(0);
-
-    function addFakeCheatInDOM(){
-      const cheat = $compile(`<cheat cheat="vm.content.cheats[0]"
-        id="cheat-0"
-        formats="vm.availableFormats"
-        remove-cheat="vm.removeCheat(0)"
-        code-place-holder="vm.getCodePlaceHolder(0)"></cheat>`)($scope);
-      $scope.$digest();
-
-      angular
-        .element(document.querySelector('#cheats-container'))
-        .append(cheat);
-    }
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -155,21 +147,19 @@
 
   //////////////////////////////////////////////////////////////////////////////
 
-  function getCodePlaceHolderTest(){
-    controller = createWithParams();
+  function getAvailableFormatsTest(){
+    Object
+      .keys(ENV.consoles)
+      .forEach((console) => {
+        controller = createWithParams({
+          content: {
+            console
+          }
+        });
 
-    controller.content.cheats[0] = undefined;
-    should(controller.getCodePlaceHolder(0)).equal('');
-
-    controller.content.cheats[0] = { format: ENV.codeFormat.GameShark };
-    should(controller.getCodePlaceHolder(0)).match(/^[A-Fa-f0-9:]+$/);
-
-    controller.content.cheats[0].format = ENV.codeFormat.GameGenie;
-    should(controller.getCodePlaceHolder(0)).match(/^[A-Fa-f0-9:]+$/);
-
-    controller.content.cheats[0].format = 'some unknown format';
-    should(controller.getCodePlaceHolder(0)).be.undefined();
-
+        controller.getAvailableFormats();
+        should(controller.availableFormats).eql(ENV.codeFormats[console]);
+      });
   }
 
   //////////////////////////////////////////////////////////////////////////////
