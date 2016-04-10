@@ -19,7 +19,7 @@ module.exports = {
 };
 
 function completeXml(){
-  browser.get('/');
+  browser.get('#/editor');
 
   gameInfoShouldBe('', '', '');
   cheatStatusShouldBe(0, '"0"', false);

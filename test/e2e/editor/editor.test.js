@@ -10,7 +10,7 @@ module.exports = {
 };
 
 function init(){
-  browser.get('/');
+  browser.get('#/editor');
 
   expect(browser.getTitle()).toBe('RetroN5 cheats manager');
 
@@ -76,7 +76,7 @@ function init(){
 ///////////////////////////////////////////////////////////////////////////
 
 function setGameTitle(){
-  browser.get('/');
+  browser.get('#/editor');
 
   const inputGameTitle = elements.getInputGameTitle();
   const xmlGameTitle = elements.getXmlGameTitle();
@@ -103,7 +103,7 @@ function setGameTitle(){
 ///////////////////////////////////////////////////////////////////////////
 
 function setVersionCrc(){
-  browser.get('/');
+  browser.get('#/editor');
 
   const inputVersionCrc = elements.getInputVersionCrc();
   const xmlVersionCrc = elements.getXmlVersionCrc();
@@ -145,7 +145,7 @@ function setVersionCrc(){
 ///////////////////////////////////////////////////////////////////////////
 
 function setVersionTitle(){
-  browser.get('/');
+  browser.get('#/editor');
 
   const inputVersionTitle = elements.getInputVersionTitle();
   const xmlVersionTitle = elements.getXmlVersionTitle();

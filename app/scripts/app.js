@@ -12,6 +12,9 @@
       .when('/', {
         templateUrl: 'views/main.html'
       })
+      .when('/editor', {
+        templateUrl: 'views/editor.html'
+      })
       .otherwise({
         redirectTo: '/'
       });

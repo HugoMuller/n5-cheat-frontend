@@ -3,6 +3,7 @@
 
   angular.module('n5cheat', [
     'ngRoute',
+    'n5cheat.home',
     'n5cheat.filters',
     'n5cheat.cheat',
     'n5cheat.editor',
@@ -10,6 +11,7 @@
     'n5cheat.navbar'
   ]);
 
+  angular.module('n5cheat.home', []);
   angular.module('n5cheat.filters', []);
   angular.module('n5cheat.cheat', []);
   angular.module('n5cheat.xmlCode', []);

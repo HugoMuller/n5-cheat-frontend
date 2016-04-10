@@ -10,7 +10,20 @@
       bindings: {}
     });
 
-  NavbarCtrl.$inject = [];
+  NavbarCtrl.$inject = ['$location'];
 
-  function NavbarCtrl(){}
+  function NavbarCtrl($location){
+    const vm = this;
+
+    vm.isHomeActive = isHomeActive;
+    vm.isEditorActive = isEditorActive;
+
+    function isHomeActive(){
+      return $location.path() === '/';
+    }
+
+    function isEditorActive(){
+      return $location.path() === '/editor';
+    }
+  }
 }());

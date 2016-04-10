@@ -29,7 +29,7 @@ module.exports = {
 ///////////////////////////////////////////////////////////////////////////
 
 function addOneCheat(){
-  browser.get('/');
+  browser.get('#/editor');
 
   const expectValuesToBe = checkValuesOf(cheatElementList, xmlCheatCount, xmlErrorList);
   const cheat = elements.getCheatElementWrapper(0);
@@ -125,7 +125,7 @@ function addOneCheat(){
 ///////////////////////////////////////////////////////////////////////////
 
 function removeOneCheat(){
-  browser.get('/');
+  browser.get('#/editor');
 
   const expectValuesToBe = checkValuesOf(cheatElementList, xmlCheatCount, xmlErrorList);
   const cheat = elements.getCheatElementWrapper(0);
@@ -157,7 +157,7 @@ function removeOneCheat(){
 ///////////////////////////////////////////////////////////////////////////
 
 function addCheats(){
-  browser.get('/');
+  browser.get('#/editor');
 
   const expectValuesToBe = checkValuesOf(cheatElementList, xmlCheatCount, xmlErrorList);
   const cheats = [
@@ -211,7 +211,7 @@ function addCheats(){
 ///////////////////////////////////////////////////////////////////////////
 
 function removeCheats(){
-  browser.get('/');
+  browser.get('#/editor');
 
   const expectValuesToBe = checkValuesOf(cheatElementList, xmlCheatCount, xmlErrorList);
   const cheat = elements.getCheatElementWrapper;
@@ -294,7 +294,7 @@ function removeCheats(){
 ///////////////////////////////////////////////////////////////////////////
 
 function consoleChanges(){
-  browser.get('/');
+  browser.get('#/editor');
 
   const expectValuesToBe = checkValuesOf(cheatElementList, xmlCheatCount, xmlErrorList);
   const cheat = elements.getCheatElementWrapper(0);
