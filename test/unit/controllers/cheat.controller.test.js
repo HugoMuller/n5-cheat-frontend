@@ -21,6 +21,7 @@
       beforeEach(createAndSpy);
 
       it('should init cheat format and placeholder', $onInitTest);
+      it('should init cheat format and placeholder with empty string if no data provided', $onInitEmptyTest);
 
       afterEach(restoreSpy);
     });
@@ -98,6 +99,16 @@
     controller.$onInit();
     should(controller.cheat.format).equal(format.format);
     should(controller.placeHolder).equal(format.sample);
+    should(controller.updatePlaceHolder.callCount).equal(1);
+  }
+
+  function $onInitEmptyTest(){
+    should(controller.cheat.format).equal('');
+    should(controller.placeHolder).be.undefined();
+
+    controller.$onInit();
+    should(controller.cheat.format).equal('');
+    should(controller.placeHolder).equal('');
     should(controller.updatePlaceHolder.callCount).equal(1);
   }
 
