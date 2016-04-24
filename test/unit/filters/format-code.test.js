@@ -7,7 +7,7 @@
     beforeEach(loadModule);
     beforeEach(injectThings);
 
-    describe('Format Code', () => {
+    describe('Format Code (formatCode)', () => {
       it('should format a code with the given format', formatCodeTest);
       it('should not format a code if unknown format', noFormatCodeTest);
     });

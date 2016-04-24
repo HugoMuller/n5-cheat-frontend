@@ -5,13 +5,33 @@
   let $controller;
   let $rootScope;
 
-  describe('Editor Controller', () => {
+  describe('Cheat Controller (CheatCtrl)', () => {
     beforeEach(loadModule);
     beforeEach(injectThings);
 
-    describe('init', () => {
+    describe('initialization', () => {
       it('should init the controller', initTest);
+    });
+
+    describe('.updatePlaceHolder', () => {
       it('should update the placeHolder', updatePlaceHolderTest);
+    });
+
+    describe('.$onInit', () => {
+      beforeEach(createAndSpy);
+
+      it('should init cheat format and placeholder', $onInitTest);
+
+      afterEach(restoreSpy);
+    });
+
+    describe('.$onChanges', () => {
+      beforeEach(createAndSpy);
+
+      it('should update cheat format and placeholder if selected format has changed', $onChangesTest);
+      it('should do nothing if no change happened', $onChangesNoneTest);
+
+      afterEach(restoreSpy);
     });
   });
 
@@ -32,32 +52,86 @@
   //////////////////////////////////////////////////////////////////////////////
 
   function updatePlaceHolderTest(){
-    const expected = 'expectedSample';
+    const formats = [
+      {
+        format: 'format1',
+        sample: 'sample1'
+      }, {
+        format: 'format2',
+        sample: 'sample2'
+      }, {
+        format: 'format3',
+        sample: 'sample3'
+      }
+    ];
 
     controller = createWithParams({
       cheat: {
-        format: 'GameShark'
+        format: 'format1'
       },
-      formats: [
-        {
-          format: 'format1',
-          sample: 'sample1'
-        }, {
-          format: 'GameShark',
-          sample: expected
-        }, {
-          format: 'format3',
-          sample: 'sample3'
-        }
-      ]
+      formats
     });
 
-    controller.updatePlaceHolder();
-    should(controller.placeHolder).equal(expected);
+    formats.forEach(testFormat);
+    testFormat({ format: 'unknown format', sample: '' });
 
-    controller.cheat.format = 'unknown format';
-    controller.updatePlaceHolder();
-    should(controller.placeHolder).equal('');
+    function testFormat(format){
+      controller.cheat.format = format.format;
+      controller.updatePlaceHolder();
+      should(controller.placeHolder).equal(format.sample);
+    }
+  }
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  function $onInitTest(){
+    const format = {
+      format: 'format1',
+      sample: 'sample1'
+    };
+
+    controller.formats = [format];
+
+    should(controller.cheat.format).equal('');
+    should(controller.placeHolder).be.undefined();
+
+    controller.$onInit();
+    should(controller.cheat.format).equal(format.format);
+    should(controller.placeHolder).equal(format.sample);
+    should(controller.updatePlaceHolder.callCount).equal(1);
+  }
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  function $onChangesTest(){
+    const formats = [
+      {
+        format: 'format1',
+        sample: 'sample1'
+      }, {
+        format: 'format2',
+        sample: 'sample2'
+      }
+    ];
+
+    controller.formats = formats;
+    controller.$onChanges({
+      formats: { currentValue: formats }
+    });
+
+    should(controller.updatePlaceHolder.callCount).equal(1);
+    should(controller.cheat.format).equal(formats[0].format);
+    should(controller.placeHolder).equal(formats[0].sample);
+  }
+
+  function $onChangesNoneTest(){
+    controller.cheat.format = 'format';
+    controller.placeHolder = 'sample';
+    controller.$onChanges({});
+
+    should(controller.updatePlaceHolder.callCount).equal(0);
+    should(controller.cheat.format).equal('format');
+    should(controller.placeHolder).equal('sample');
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -75,15 +149,18 @@
   }
 
   function createWithParams(params){
-    params = params || {};
-    const _controller = $controller('CheatCtrl', $rootScope.$new());
+    return $controller('CheatCtrl', $rootScope.$new(), params || {});
+  }
 
-    for(const p in params){
-      if(params.hasOwnProperty(p)){
-        _controller[p] = params[p];
-      }
-    }
+  function createAndSpy(){
+    controller = createWithParams({
+      cheat: { format: '' },
+      formats: []
+    });
+    sinon.spy(controller, 'updatePlaceHolder');
+  }
 
-    return _controller;
+  function restoreSpy(){
+    controller.updatePlaceHolder.restore();
   }
 })();

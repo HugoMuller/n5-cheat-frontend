@@ -7,12 +7,12 @@
   let $location;
   const endPoints = [ 'isHomeActive', 'isEditorActive'];
 
-  describe('Navbar Controller', () => {
+  describe('Navbar Controller (NavbarCtrl)', () => {
     beforeEach(loadModule);
     beforeEach(mock);
     beforeEach(injectThings);
 
-    describe('init', () => {
+    describe('initialization', () => {
       it('should init the controller', initTest);
     });
 
@@ -82,15 +82,6 @@
   }
 
   function createWithParams(params){
-    params = params || {};
-    const _controller = $controller('NavbarCtrl', $rootScope.$new());
-
-    for(const p in params){
-      if(params.hasOwnProperty(p)){
-        _controller[p] = params[p];
-      }
-    }
-
-    return _controller;
+    return $controller('NavbarCtrl', $rootScope.$new(), params || {});
   }
 })();

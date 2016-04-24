@@ -7,7 +7,7 @@
     beforeEach(loadModule);
     beforeEach(injectThings);
 
-    describe('Valid Cheats', () => {
+    describe('Valid Cheats (validCheats)', () => {
       it('should return an array of valid cheats', cheatValidTest);
     });
   });

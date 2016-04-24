@@ -43,7 +43,7 @@
     function initCheatFormat(formats){
       const formatObj = formats[0];
       vm.cheat.format = formatObj ? formatObj.format : '';
-      updatePlaceHolder();
+      vm.updatePlaceHolder();
     }
   }
 })();

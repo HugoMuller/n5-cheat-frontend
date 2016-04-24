@@ -3,12 +3,17 @@
 
   let cheatService;
 
-  describe('Cheat Service', () => {
+  describe('Cheat Service (cheatService)', () => {
     beforeEach(loadModule);
     beforeEach(injectThings);
 
-    it('it should return a cheat object', initTest);
-    it('it should format a cheat code correctly', formattedCodeTest);
+    describe('call', () => {
+      it('should return a cheat object', initTest);
+    });
+
+    describe('.sanitizedCode', () => {
+      it('should format a cheat code correctly', formattedCodeTest);
+    });
   });
 
   //////////////////////////////////////////////////////////////////////////////

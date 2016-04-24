@@ -9,22 +9,24 @@
   let validCheatsFilter;
   let ENV;
 
-  describe('Editor Controller', () => {
+  describe('Editor Controller (EditorCtrl)', () => {
     beforeEach(loadModule);
     beforeEach(mock);
     beforeEach(injectThings);
 
-    describe('init', () => {
+    describe('initialization', () => {
       it('should init the controller', initTest);
     });
 
     describe('.addCheat', () => {
       beforeEach(initDOM);
+
       it('should add a cheat', addCheatTest);
     });
 
     describe('.removeCheat', () => {
       beforeEach(initDOM);
+
       it('should remove a cheat', removeCheatTest);
     });
 
