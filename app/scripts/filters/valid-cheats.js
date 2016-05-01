@@ -9,6 +9,9 @@
 
   function validCheats(){
     return (cheats, console) => cheats
-      .filter((cheat) => angular.isFunction(cheat.isValid) && cheat.isValid(console));
+      .filter((cheat) => cheat &&
+        angular.isFunction(cheat.isValid) &&
+        cheat.isValid(console)
+      );
   }
 }());

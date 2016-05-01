@@ -15,30 +15,17 @@
   //////////////////////////////////////////////////////////////////////////////
 
   function cheatValidTest(){
-    const validCheat = fakeCheat('format', 'name', true);
+    const validCheat = { isValid: sinon.stub().returns(true) };
 
     const cheats = [
       null,
-      fakeCheat(null, 'name', true),
-      fakeCheat('format', null, true),
-      fakeCheat('format', 'name', false),
+      { isValid: sinon.stub().returns(false) },
       validCheat,
-      {
-        format: 'format',
-        name: 'name',
-        sanitizedCode: 'notAfunction'
-      }
+      { isValid: 'notAfunction' }
     ];
 
+    should(validCheatsFilter(cheats).length).eql(1);
     should(validCheatsFilter(cheats)).eql([validCheat]);
-
-    function fakeCheat(format, name, sanitized){
-      return {
-        format: format || '',
-        name: name || '',
-        sanitizedCode: sinon.stub().returns(sanitized)
-      };
-    }
   }
 
   //////////////////////////////////////////////////////////////////////////////

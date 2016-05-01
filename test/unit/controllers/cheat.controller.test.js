@@ -34,6 +34,18 @@
 
       afterEach(restoreSpy);
     });
+
+    describe('.onFormatChanges', () => {
+      beforeEach(createAndSpy);
+
+      it('should call .updatePlaceHolder and .updateError', onFormatChangesTest);
+
+      afterEach(restoreSpy);
+    });
+
+    describe('.updateError', () => {
+      it('should call .manageError', updateErrorTest);
+    });
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -41,13 +53,25 @@
   function initTest(){
     controller = createWithParams();
 
-    should(controller.cheat).be.undefined();
-    should(controller.formats).be.undefined();
-    should(controller.removeCheat).be.undefined();
-    should(controller.placeHolder).be.undefined();
-    should(controller.$onInit).be.a.Function();
-    should(controller.$onChanges).be.a.Function();
-    should(controller.updatePlaceHolder).be.a.Function();
+    [
+      'cheat',
+      'formats',
+      'removeCheat',
+      'manageError',
+      'placeHolder'
+    ].forEach((attr) => {
+      should(controller[attr]).be.undefined();
+    });
+
+    [
+      '$onInit',
+      '$onChanges',
+      'updatePlaceHolder',
+      'updateError',
+      'onFormatChanges'
+    ].forEach((attr) => {
+      should(controller[attr]).be.a.Function();
+    });
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -147,6 +171,30 @@
 
   //////////////////////////////////////////////////////////////////////////////
 
+  function onFormatChangesTest(){
+    controller.manageError = sinon.stub();
+    controller.onFormatChanges();
+
+    should(controller.updatePlaceHolder.callCount).equal(1, 'expected updatePlaceHolder to be called once');
+    should(controller.updateError.callCount).equal(1, 'expected updateError to be called once');
+  }
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  function updateErrorTest(){
+    const cheat = { attr: 1 };
+    controller = createWithParams({
+      cheat,
+      manageError: sinon.stub()
+    });
+
+    controller.updateError();
+    should(controller.manageError.callCount).equal(1);
+    should(controller.manageError.args[0][0]).eql({ cheat });
+  }
+
+  //////////////////////////////////////////////////////////////////////////////
+
   function loadModule(){
     module('n5cheat');
     module('n5cheat.cheat');
@@ -169,6 +217,7 @@
       formats: []
     });
     sinon.spy(controller, 'updatePlaceHolder');
+    sinon.spy(controller, 'updateError');
   }
 
   function restoreSpy(){

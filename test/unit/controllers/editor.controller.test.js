@@ -40,11 +40,6 @@
       it('should return the correct available formats', getAvailableFormatsTest);
     });
 
-    describe('.showXml', () => {
-      it('should return true', showXmlTruthyTest);
-      it('should return false', showXmlFalsyTest);
-    });
-
     describe('.hasGameTitle', () => {
       it('should return true', hasGameTitleTruthyTest);
       it('should return false', hasGameTitleFalsyTest);
@@ -58,6 +53,29 @@
     describe('.hasVersionTitle', () => {
       it('should return true', hasVersionTitleTruthyTest);
       it('should return false', hasVersionTitleFalsyTest);
+    });
+
+    describe('.onGameTitleChanges', () => {
+      it('should delete the gameTitle error if game title is set', onGameTitleChangesTruthyTest);
+      it('should set the gameTitle error if game has no title', onGameTitleChangesFalsyTest);
+    });
+
+    describe('.onVersionCrcChanges', () => {
+      it('should delete the versionCrc error if CRC is set', onVersionCrcChangesTruthyTest);
+      it('should set the versionCrc error if game has no CRC', onVersionCrcChangesFalsyTest);
+    });
+
+    describe('.onVersionTitleChanges', () => {
+      it('should delete the versionTitle error if version title is set', onVersionTitleChangesTruthyTest);
+      it('should set the versionTitle error if game has no version title', onVersionTitleChangesFalsyTest);
+    });
+
+    describe('.onAddCheat', () => {
+      it('should remove noCheat', onAddCheatRemoveNoCheatTest);
+      it('should remove the error if cheat is valid', onAddCheatRemoveErrorTest);
+      it('should add a name error if cheat has no name', onAddCheatAddNameErrorTest);
+      it('should add a code error if cheat code is invalid', onAddCheatAddCodeErrorTest);
+      it('should add a format error if cheat has no format', onAddCheatAddFormatErrorTest);
     });
   });
 
@@ -91,10 +109,13 @@
       'removeCheat',
       'countCheats',
       'getAvailableFormats',
-      'showXml',
       'hasGameTitle',
       'hasVersionCrc',
-      'hasVersionTitle'
+      'hasVersionTitle',
+      'onGameTitleChanges',
+      'onVersionCrcChanges',
+      'onVersionTitleChanges',
+      'onAddCheat'
     ].forEach((fn) => should(controller[fn]).be.a.Function());
   }
 
@@ -102,15 +123,19 @@
 
   function addCheatTest(){
     controller = createWithParams();
+    sinon.spy(controller, 'onAddCheat');
+
     should(controller.content.cheats.length).equal(0);
     should(getCheatElemCount()).equal(0);
 
     for(let i=1; i<5; i++){
+      controller.onAddCheat.reset();
       controller.addCheat();
 
       should(controller.content.cheats.length).equal(i);
       should(getCheatElemCount()).equal(i);
       should($timeout.callCount).equal(1);
+      should(controller.onAddCheat.callCount).equal(1);
 
       const callback = $timeout.args[0][0];
       should(callback).be.a.Function();
@@ -176,36 +201,6 @@
         controller.getAvailableFormats();
         should(controller.availableFormats).eql(ENV.codeFormats[console]);
       });
-  }
-
-  //////////////////////////////////////////////////////////////////////////////
-
-  function showXmlTruthyTest(){
-    const stubs = {
-      hasGameTitle: sinon.stub().returns(true),
-      hasVersionCrc: sinon.stub().returns(true),
-      hasVersionTitle: sinon.stub().returns(true),
-      countCheats: sinon.stub().returns(1)
-    };
-    controller = createWithParams(stubs);
-    should(controller.showXml()).be.true();
-  }
-
-  function showXmlFalsyTest(){
-    const stubs = {
-      hasGameTitle: sinon.stub(),
-      hasVersionCrc: sinon.stub(),
-      hasVersionTitle: sinon.stub(),
-      countCheats: sinon.stub()
-    };
-    controller = createWithParams(stubs);
-    Object.keys(stubs).forEach(falsyTest);
-
-    function falsyTest(stub){
-      setTruthyStub(stubs, stub);
-      stubs.countCheats.returns(stub === 'countCheats' ? 1 : 0);
-      should(controller.showXml()).be.false();
-    }
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -283,6 +278,163 @@
 
   //////////////////////////////////////////////////////////////////////////////
 
+  function onGameTitleChangesTruthyTest(){
+    controller = createWithParams({
+      content: {
+        game: { title: 'title' }
+      },
+      errorList: {
+        game: {
+          gameTitle: { message: 'message', action: 'action' }
+        }
+      }
+    });
+
+    controller.onGameTitleChanges();
+    should(controller.errorList.game).not.have.property('gameTitle');
+  }
+
+  function onGameTitleChangesFalsyTest(){
+    controller = createWithParams();
+
+    controller.onGameTitleChanges();
+    should(controller.errorList.game).have.property('gameTitle');
+  }
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  function onVersionTitleChangesTruthyTest(){
+    controller = createWithParams({
+      content: {
+        version: { title: 'title' }
+      },
+      errorList: {
+        game: {
+          versionTitle: { message: 'message', action: 'action' }
+        }
+      }
+    });
+
+    controller.onVersionTitleChanges();
+    should(controller.errorList.game).not.have.property('versionTitle');
+  }
+
+  function onVersionTitleChangesFalsyTest(){
+    controller = createWithParams();
+
+    controller.onVersionTitleChanges();
+    should(controller.errorList.game).have.property('versionTitle');
+  }
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  function onVersionCrcChangesTruthyTest(){
+    controller = createWithParams({
+      content: {
+        version: { crc: '01234567' }
+      },
+      errorList: {
+        game: {
+          versionCrc: { message: 'message', action: 'action' }
+        }
+      }
+    });
+
+    controller.onVersionCrcChanges();
+    should(controller.errorList.game).not.have.property('versionCrc');
+  }
+
+  function onVersionCrcChangesFalsyTest(){
+    controller = createWithParams();
+
+    controller.onVersionCrcChanges();
+    should(controller.errorList.game).have.property('versionCrc');
+  }
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  function onAddCheatRemoveNoCheatTest(){
+    const cheat = cheatService();
+    controller = createWithParams({
+      content: { cheats: [cheat] },
+      errorList: {
+        cheat: {
+          noCheat: { message: 'message', action: 'action' }
+        }
+      }
+    });
+
+    controller.onAddCheat(0, cheat);
+    should(controller.errorList.cheat).not.have.property('noCheat');
+  }
+
+  function onAddCheatRemoveErrorTest(){
+    const id = 0;
+    const cheat = cheatService();
+    controller = createWithParams({
+      content: { cheats: [cheat] },
+      errorList: {
+        cheat: {
+          noCheat: { message: 'message', action: 'action' },
+          [id]: { message: 'message', action: 'action' }
+        }
+      }
+    });
+
+    controller.onAddCheat(id, cheat);
+    should(controller.errorList.cheat).not.have.property(id);
+  }
+
+  function onAddCheatAddNameErrorTest(){
+    const id = 0;
+    const cheat = cheatService();
+    cheat.name = '';
+    cheat.isValid.returns(false);
+    cheat.formatedCode.returns(true);
+
+    controller = createWithParams({
+      content: { cheats: [cheat] }
+    });
+
+    controller.onAddCheat(id, cheat);
+    should(controller.errorList.cheat).have.property(id);
+    should(controller.errorList.cheat[id].message).be.a.Function();
+    should(controller.errorList.cheat[id].message()).containEql('no name');
+  }
+
+  function onAddCheatAddCodeErrorTest(){
+    const id = 0;
+    const cheat = cheatService();
+    cheat.isValid.returns(false);
+    cheat.formatedCode.returns(false);
+
+    controller = createWithParams({
+      content: { cheats: [cheat] }
+    });
+
+    controller.onAddCheat(id, cheat);
+    should(controller.errorList.cheat).have.property(id);
+    should(controller.errorList.cheat[id].message()).containEql('invalid code');
+  }
+
+  function onAddCheatAddFormatErrorTest(){
+    const id = 0;
+    const cheat = cheatService();
+    cheat.format = '';
+    cheat.isValid.returns(false);
+    cheat.formatedCode.returns(true);
+
+    controller = createWithParams({
+      content: { cheats: [cheat] }
+    });
+
+    controller.onAddCheat(id, cheat);
+    should(controller.errorList.cheat).have.property(id);
+    should(controller.errorList.cheat[id].message()).containEql('no format');
+  }
+
+  //////////////////////////////////////////////////////////////////////////////
+
   function loadModule(){
     module('n5cheat');
     module('n5cheat.editor');
@@ -300,8 +452,9 @@
       format: 'format',
       hacker: 'hacker',
       name: 'name',
-      computeCheatId: 1,
-      sanitizedCode: sinon.stub().returns(true)
+      computeCheatId: sinon.stub().returns(1),
+      isValid: sinon.stub().returns(true),
+      formatedCode: sinon.stub()
     });
 
     module(($provide) => {
@@ -341,14 +494,6 @@
     }
 
     return _controller;
-  }
-
-  function setTruthyStub(stubs, truthyStub){
-    for(const stubName in stubs){
-      if(stubs.hasOwnProperty(stubName)){
-        stubs[stubName].returns(stubName === truthyStub);
-      }
-    }
   }
 
   function getCheatElemCount(){

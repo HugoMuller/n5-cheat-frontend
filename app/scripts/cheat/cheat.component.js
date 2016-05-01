@@ -50,8 +50,8 @@
     }
 
     function onFormatChanges(){
-      updatePlaceHolder();
-      updateError();
+      vm.updatePlaceHolder();
+      vm.updateError();
     }
 
     function updateError(){

@@ -52,8 +52,7 @@
       }
 
       function isValid(console){
-        const _isValid = that &&
-          that.format &&
+        const _isValid = that.format &&
           that.name &&
           angular.isFunction(that.formatedCode) &&
           that.formatedCode(console);

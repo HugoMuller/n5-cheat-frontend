@@ -50,7 +50,7 @@
         .element(document.getElementById('cheats-container'))
         .append(cheatElem);
 
-      onAddCheat(id, cheat);
+      vm.onAddCheat(id, cheat);
       $timeout(() => $anchorScroll(ENV.anchors.bottom));
     }
 
