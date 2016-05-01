@@ -9,7 +9,7 @@
           class="cheat-format"
           data-ng-model="vm.cheat.format"
           data-ng-options="format.format as format.format for format in vm.formats"
-          data-ng-change="vm.updatePlaceHolder()">
+          data-ng-change="vm.onFormatChanges()">
         </select>
       </div>
       <div class="col-md-1">Hacker:&nbsp;</div>
@@ -20,6 +20,7 @@
       <div class="col-md-4">
         <input type="text"
           data-ng-model="vm.cheat.name"
+          data-ng-change="vm.updateError()"
           maxlength="50"
           class="cheat-name"
           required/>
@@ -28,6 +29,7 @@
       <div class="col-md-4">
         <textarea placeholder="{{vm.placeHolder}}"
           data-ng-model="vm.cheat.code"
+          data-ng-change="vm.updateError()"
           class="cheat-code"
           required></textarea>
       </div>

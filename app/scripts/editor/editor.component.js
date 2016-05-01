@@ -21,7 +21,6 @@
     vm.removeCheat = removeCheat;
     vm.countCheats = countCheats;
     vm.getAvailableFormats = getAvailableFormats;
-    vm.showXml = showXml;
     vm.hasGameTitle = hasGameTitle;
     vm.hasVersionCrc = hasVersionCrc;
     vm.hasVersionTitle = hasVersionTitle;
@@ -29,6 +28,7 @@
     vm.onGameTitleChanges = onGameTitleChanges;
     vm.onVersionCrcChanges = onVersionCrcChanges;
     vm.onVersionTitleChanges = onVersionTitleChanges;
+    vm.onAddCheat = onAddCheat;
 
     init();
 
@@ -42,7 +42,8 @@
       const elem = `<cheat id="cheat-${id}"
         cheat="vm.content.cheats[${id}]"
         formats="vm.availableFormats"
-        remove-cheat="vm.removeCheat(${id})"></cheat>`;
+        remove-cheat="vm.removeCheat(${id})"
+        manage-error="vm.onAddCheat(${id}, cheat)"></cheat>`;
       const cheatElem = $compile(angular.element(elem))($scope);
 
       angular
@@ -68,10 +69,6 @@
 
     function getAvailableFormats(){
       vm.availableFormats = ENV.codeFormats[vm.content.console];
-    }
-
-    function showXml(){
-      return vm.hasGameTitle() && vm.hasVersionCrc() && vm.hasVersionTitle() && vm.countCheats() > 0;
     }
 
     function hasGameTitle(){
@@ -135,7 +132,7 @@
     }
 
     function onVersionTitleChanges(){
-      if(hasVersionCrc()){
+      if(hasVersionTitle()){
         delete vm.errorList.game.versionTitle;
       }else{
         vm.errorList.game.versionTitle = {
@@ -147,34 +144,40 @@
 
     function onAddCheat(id, cheat){
       delete vm.errorList.cheat.noCheat;
+
+      if(cheat.isValid(vm.content.console)){
+        return delete vm.errorList.cheat[id];
+      }
+
       vm.errorList.cheat[id] = { message, action };
 
       function message(){
-        let error;
-
-        if(!cheat.format){
-          error = 'no format';
-        }else if(!cheat.name){
-          error = 'no name';
-        }else if(!cheat.sanitizedCode()){
-          error = 'invalid code';
-        }
+        const error = grabItem({
+          format: 'no format',
+          name: 'no name',
+          code: 'invalid code'
+        });
 
         return `Cheat #${cheat.computeCheatId()} has ${error}`;
       }
 
       function action(){
-        let selector = `#cheat-${id} `;
-
-        if(!cheat.format){
-          selector += 'select.cheat-format';
-        }else if(!cheat.name){
-          selector += 'input.cheat-name';
-        }else if(!cheat.sanitizedCode()){
-          selector += 'textarea.cheat-code';
-        }
+        const selector = grabItem({
+          format: `#cheat-${id} select.cheat-format`,
+          name: `#cheat-${id} input.cheat-name`,
+          code: `#cheat-${id} textarea.cheat-code`
+        });
 
         document.querySelector(selector).focus();
+      }
+
+      function grabItem(item){
+        if(!cheat.format) return item.format;
+        if(!cheat.name) return item.name;
+
+        if(!cheat.formatedCode(vm.content.console)){
+          return item.code;
+        }
       }
     }
 

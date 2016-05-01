@@ -8,12 +8,7 @@
   //////////////////////////////////////////////////////////////////////////////
 
   function validCheats(){
-    return (cheats) => cheats
-      .filter((cheat) => cheat
-        && cheat.format
-        && cheat.name
-        && angular.isFunction(cheat.sanitizedCode)
-        && cheat.sanitizedCode()
-      );
+    return (cheats, console) => cheats
+      .filter((cheat) => angular.isFunction(cheat.isValid) && cheat.isValid(console));
   }
 }());

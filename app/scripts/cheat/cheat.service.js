@@ -12,10 +12,10 @@
 
   //////////////////////////////////////////////////////////////////////////////
 
-  cheatService.$inject = [];
+  cheatService.$inject = ['formatCodeFilter'];
 
-  function cheatService(){
-    return function(cheats){
+  function cheatService(formatCodeFilter){
+    return (cheats) => {
       const that = {};
 
       that.id = uniqueId();
@@ -25,14 +25,15 @@
       that.code = '';
 
       that.computeCheatId = computeCheatIdFromCheats(cheats);
-      that.sanitizedCode = sanitizedCode;
+      that.formatedCode = formatedCode;
+      that.isValid = isValid;
 
       return that;
 
     ///////////////////////////////////////////////////////////////////////////
 
       function computeCheatIdFromCheats(_cheats){
-        return function(){
+        return () => {
           const id = that.id;
           let _id = 0;
 
@@ -46,13 +47,18 @@
         };
       }
 
-      function sanitizedCode(){
-        const res = (that.code || '')
-          .replace(/\r\n|\r|\n/g, ',')
-          .replace(/[^A-Fa-f0-9:,]/g, '')
-          .toUpperCase();
+      function formatedCode(console){
+        return formatCodeFilter(that.code, that.format, console);
+      }
 
-        return res;
+      function isValid(console){
+        const _isValid = that &&
+          that.format &&
+          that.name &&
+          angular.isFunction(that.formatedCode) &&
+          that.formatedCode(console);
+
+        return !!_isValid;
       }
     };
   }

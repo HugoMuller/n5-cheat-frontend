@@ -19,6 +19,8 @@
   function ErrorListCtrl(ENV){
     const vm = this;
 
+    vm.maxCheatErrorsDisplayed = ENV.maxCheatErrorsDisplayed;
+
     vm.errorCount = errorCount;
     vm.gameErrorCount = gameErrorCount;
     vm.cheatErrorCount = cheatErrorCount;

@@ -72,23 +72,6 @@
 
   <div class="editor-right col-md-6">
     <div class="fieldset dark">
-      <div class="fieldset-legend">XML state</div>
-
-      <div class="fieldset-content">
-        <div class="xml-info xml-info-error" data-ng-if="!vm.showXml()">
-          <div>XML is malformed</div>
-
-          <ul>
-            <li data-ng-if="vm.countCheats() < 1">No valid cheat codes</li>
-          </ul>
-        </div>
-        <div class="xml-info xml-info-success" data-ng-if="vm.showXml()">
-          <div>XML is well formed</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="fieldset dark">
       <div class="fieldset-legend">
         XML compiled
         <error-list errors="vm.errorList"></error-list>

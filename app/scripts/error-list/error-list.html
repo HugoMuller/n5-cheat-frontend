@@ -21,10 +21,10 @@
 
   <li data-ng-if="!!vm.cheatErrorCount()" class="dropdown-header">Cheats Errors</li>
   <li data-ng-if="!!vm.cheatErrorCount()"
-    data-ng-repeat="cheatError in vm.errorList.cheat | limitTo:vm.maxCheatErrors">
+    data-ng-repeat="cheatError in vm.errorList.cheat | objLimitTo:vm.maxCheatErrorsDisplayed">
     <a href="" data-ng-click="cheatError.action()">{{cheatError.message()}}</a>
   </li>
-  <li data-ng-if="!!vm.hiddenCheatErrorsCount()" class="dropdown-header">
-    {{vm.hiddenCheatErrorsCount()}} more...
+  <li data-ng-if="!!vm.hiddenCheatErrorCount()" class="dropdown-header">
+    {{vm.hiddenCheatErrorCount()}} more...
   </li>
 </ul>

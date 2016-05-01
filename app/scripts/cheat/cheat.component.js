@@ -11,6 +11,7 @@
         cheat: '=',
         formats: '<',
         removeCheat: '&',
+        manageError: '&'
       }
     });
 
@@ -24,6 +25,8 @@
     vm.$onInit = $onInit;
     vm.$onChanges = $onChanges;
     vm.updatePlaceHolder = updatePlaceHolder;
+    vm.updateError = updateError;
+    vm.onFormatChanges = onFormatChanges;
 
     function $onInit(){
       initCheatFormat(vm.formats);
@@ -44,6 +47,15 @@
       const formatObj = formats[0];
       vm.cheat.format = formatObj ? formatObj.format : '';
       vm.updatePlaceHolder();
+    }
+
+    function onFormatChanges(){
+      updatePlaceHolder();
+      updateError();
+    }
+
+    function updateError(){
+      vm.manageError({ cheat: vm.cheat });
     }
   }
 }());
