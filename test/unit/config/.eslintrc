@@ -2,5 +2,8 @@
   "extends": "../../../.eslintrc",
   "env": {
     "node": true
-  }
+  },
+  "rules": {
+    "strict": [2, "safe"]
+    }
 }

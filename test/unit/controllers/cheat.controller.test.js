@@ -10,7 +10,7 @@
     beforeEach(injectThings);
 
     describe('initialization', () => {
-      it('should init the controller', initTest);
+      it('should initialize the controller', initTest);
     });
 
     describe('.updatePlaceHolder', () => {
@@ -20,8 +20,8 @@
     describe('.$onInit', () => {
       beforeEach(createAndSpy);
 
-      it('should init cheat format and placeholder', $onInitTest);
-      it('should init cheat format and placeholder with empty string if no data provided', $onInitEmptyTest);
+      it('should initialize cheat format and placeholder', $onInitTest);
+      it('should initialize cheat format and placeholder with empty string if no data provided', $onInitEmptyTest);
 
       afterEach(restoreSpy);
     });
@@ -174,4 +174,4 @@
   function restoreSpy(){
     controller.updatePlaceHolder.restore();
   }
-})();
+}());

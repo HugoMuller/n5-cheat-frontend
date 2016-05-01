@@ -3,9 +3,11 @@
 
   let cheatService;
   let controller;
+  let $anchorScroll;
   let $compile;
   let $controller;
   let $scope;
+  let $timeout;
   let validCheatsFilter;
   let ENV;
 
@@ -15,7 +17,7 @@
     beforeEach(injectThings);
 
     describe('initialization', () => {
-      it('should init the controller', initTest);
+      it('should initialize the controller', initTest);
     });
 
     describe('.addCheat', () => {
@@ -105,8 +107,20 @@
 
     for(let i=1; i<5; i++){
       controller.addCheat();
+
       should(controller.content.cheats.length).equal(i);
       should(getCheatElemCount()).equal(i);
+      should($timeout.callCount).equal(1);
+
+      const callback = $timeout.args[0][0];
+      should(callback).be.a.Function();
+
+      callback();
+      should($anchorScroll.callCount).equal(1);
+      should($anchorScroll.args[0][0]).equal('btn-add-cheat');
+
+      $anchorScroll.reset();
+      $timeout.reset();
     }
   }
 
@@ -277,6 +291,8 @@
   }
 
   function mock(){
+    $anchorScroll = sinon.stub();
+    $timeout = sinon.stub();
     validCheatsFilter = sinon.stub().returns([]);
 
     cheatService = sinon.stub().returns({
@@ -289,6 +305,8 @@
     });
 
     module(($provide) => {
+      $provide.value('$anchorScroll', $anchorScroll);
+      $provide.value('$timeout', $timeout);
       $provide.value('validCheatsFilter', validCheatsFilter);
       $provide.value('cheatService', cheatService);
     });
@@ -338,4 +356,4 @@
       .element(document.querySelectorAll('#cheats-container cheat'))
       .length;
   }
-})();
+}());

@@ -7,7 +7,10 @@
         <div class="col-md-6">Title<sup>*</sup>:&nbsp;
           <input
             type="text"
+            id="game-title"
             data-ng-model="vm.content.game.title"
+            data-ng-init="vm.onGameTitleChanges()"
+            data-ng-change="vm.onGameTitleChanges()"
             placeholder="title"
             maxlength="50"
             required/>
@@ -31,7 +34,10 @@
         <div class="col-md-6">CRC<sup>*</sup>:&nbsp;
           <input
             type="text"
+            id="version-crc"
             data-ng-model="vm.content.version.crc"
+            data-ng-init="vm.onVersionCrcChanges()"
+            data-ng-change="vm.onVersionCrcChanges()"
             placeholder="CRC" maxlength="8"
             pattern="[a-fA-F0-9]{8}"
             required/>
@@ -40,7 +46,10 @@
         <div class="col-md-6">Title<sup>*</sup>:&nbsp;
           <input
             type="text"
+            id="version-title"
             data-ng-model="vm.content.version.title"
+            data-ng-init="vm.onVersionTitleChanges()"
+            data-ng-change="vm.onVersionTitleChanges()"
             placeholder="Ex.: (USA) (SGB Enhanced)"
             maxlength="50"
             required/>
@@ -55,7 +64,7 @@
         <div id="cheats-container"></div>
 
         <div class="more-cheats-container">
-          <a class="btn btn-add" href="" data-ng-click="vm.addCheat()">Add cheat</a>
+          <a id="btn-add-cheat" class="btn btn-add" href="" data-ng-click="vm.addCheat()">Add cheat</a>
         </div>
       </div>
     </div>
@@ -70,9 +79,6 @@
           <div>XML is malformed</div>
 
           <ul>
-            <li data-ng-if="!vm.hasGameTitle()">No game title</li>
-            <li data-ng-if="!vm.hasVersionCrc()">No valid version CRC</li>
-            <li data-ng-if="!vm.hasVersionTitle()">No version title</li>
             <li data-ng-if="vm.countCheats() < 1">No valid cheat codes</li>
           </ul>
         </div>
@@ -83,7 +89,10 @@
     </div>
 
     <div class="fieldset dark">
-      <div class="fieldset-legend">XML compiled</div>
+      <div class="fieldset-legend">
+        XML compiled
+        <error-list errors="vm.errorList"></error-list>
+      </div>
       <xml-code class="xml-editor fieldset-content"
         content="vm.content"
         count-cheats="vm.countCheats()">

@@ -7,10 +7,10 @@
 
   const uniqueId = (function(){
     let uid = 0;
-    return function(){
-      return uid++;
-    };
-  })();
+    return () => uid++;
+  }());
+
+  //////////////////////////////////////////////////////////////////////////////
 
   cheatService.$inject = [];
 
@@ -56,4 +56,4 @@
       }
     };
   }
-})();
+}());

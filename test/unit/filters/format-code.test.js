@@ -96,4 +96,4 @@
       formatCodeFilter = _formatCodeFilter_;
     });
   }
-})();
+}());

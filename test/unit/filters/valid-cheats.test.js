@@ -52,4 +52,4 @@
       validCheatsFilter = _validCheatsFilter_;
     });
   }
-})();
+}());

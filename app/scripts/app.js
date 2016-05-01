@@ -5,6 +5,8 @@
     .module('n5cheat')
     .config(configuration);
 
+  //////////////////////////////////////////////////////////////////////////////
+
   configuration.$inject = ['$routeProvider'];
 
   function configuration($routeProvider){
@@ -19,4 +21,4 @@
         redirectTo: '/'
       });
   }
-})();
+}());

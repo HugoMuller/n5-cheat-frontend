@@ -6,6 +6,7 @@
       <div class="col-md-1">Format<sup>*</sup>:&nbsp;</div>
       <div class="col-md-4">
         <select
+          class="cheat-format"
           data-ng-model="vm.cheat.format"
           data-ng-options="format.format as format.format for format in vm.formats"
           data-ng-change="vm.updatePlaceHolder()">
@@ -16,9 +17,20 @@
     </div>
     <div class="row mt5">
       <div class="col-md-1">Name<sup>*</sup>:&nbsp;</div>
-      <div class="col-md-4"><input type="text" data-ng-model="vm.cheat.name" maxlength="50" required/></div>
+      <div class="col-md-4">
+        <input type="text"
+          data-ng-model="vm.cheat.name"
+          maxlength="50"
+          class="cheat-name"
+          required/>
+      </div>
       <div class="col-md-1">Code<sup>*</sup>:&nbsp;</div>
-      <div class="col-md-4"><textarea data-ng-model="vm.cheat.code" placeholder="{{vm.placeHolder}}" required></textarea></div>
+      <div class="col-md-4">
+        <textarea placeholder="{{vm.placeHolder}}"
+          data-ng-model="vm.cheat.code"
+          class="cheat-code"
+          required></textarea>
+      </div>
     </div>
   </div>
 </div>

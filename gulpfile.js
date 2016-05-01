@@ -1,5 +1,6 @@
 'use strict';
 /*eslint-env node*/
+/*eslint strict: [2, "safe"]*/
 const gulp = require('gulp');
 const $ = require('gulp-load-plugins')();
 const openURL = require('open');
@@ -18,6 +19,10 @@ const yeoman = {
 const paths = {
   scripts: [`${yeoman.app}/scripts/**/*.js`, `${yeoman.app}/config/*.js`, `${yeoman.app}/app.js`, `${yeoman.app}/app.module.js`],
   styles: [`${yeoman.app}/styles/main.less`],
+  allStyles: {
+    less: [`${yeoman.app}/styles/*.less`],
+    css: [`${yeoman.app}/styles/*.css`],
+  },
   views: {
     main: `${yeoman.app}/index.html`,
     files: `${yeoman.app}/views/**/*.html`,
@@ -58,9 +63,17 @@ gulp.task('start:server', () => {
 });
 
 gulp.task('watch', () => {
-  $.watch(paths.styles)
+  $.watch(paths.allStyles.less)
     .pipe($.plumber())
     .pipe(styles())
+    .pipe($.connect.reload());
+
+  $.watch(paths.allStyles.css)
+    .pipe($.plumber())
+    .pipe($.connect.reload());
+
+  $.watch(paths.views.main)
+    .pipe($.plumber())
     .pipe($.connect.reload());
 
   $.watch(paths.views.files)

@@ -88,4 +88,4 @@
       cheatService = _cheatService_;
     });
   }
-})();
+}());

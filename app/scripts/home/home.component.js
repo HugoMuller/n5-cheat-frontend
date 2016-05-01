@@ -15,4 +15,4 @@
   HomeCtrl.$inject = [];
 
   function HomeCtrl(){}
-})();
+}());

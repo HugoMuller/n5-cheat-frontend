@@ -46,4 +46,4 @@
       vm.updatePlaceHolder();
     }
   }
-})();
+}());

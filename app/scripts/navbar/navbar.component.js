@@ -10,6 +10,8 @@
       bindings: {}
     });
 
+  //////////////////////////////////////////////////////////////////////////////
+
   NavbarCtrl.$inject = ['$location'];
 
   function NavbarCtrl($location){

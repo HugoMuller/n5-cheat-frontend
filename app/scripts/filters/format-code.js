@@ -5,10 +5,12 @@
     .module('n5cheat.filters')
     .filter('formatCode', formatCode);
 
+  //////////////////////////////////////////////////////////////////////////////
+
   formatCode.$inject = ['ENV'];
 
   function formatCode(ENV){
-    return function(code, format, console){
+    return (code, format, console) => {
       code = (code || '')
         .replace(/[^A-Fa-f0-9]/g, '')
         .toUpperCase();
@@ -20,7 +22,7 @@
     };
   }
 
-  ///////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
 
   function genericFormatter(code, length, remainder = 0){
     const toks = code.match(new RegExp(`.{${length+remainder}}`, 'g')) || [];
@@ -41,4 +43,4 @@
 
     return tokens.join(',');
   }
-})();
+}());

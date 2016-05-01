@@ -13,7 +13,7 @@
     beforeEach(injectThings);
 
     describe('initialization', () => {
-      it('should init the controller', initTest);
+      it('should initialize the controller', initTest);
     });
 
     describe('tab selection', () => {
@@ -84,4 +84,4 @@
   function createWithParams(params){
     return $controller('NavbarCtrl', $rootScope.$new(), params || {});
   }
-})();
+}());

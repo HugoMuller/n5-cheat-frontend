@@ -1,0 +1,30 @@
+<span data-ng-hide="!!vm.errorCount()" href="" class="el-btn el-state">OK</span>
+<a data-ng-show="!!vm.errorCount()"
+  href=""
+  class="dropdown-toggle el-btn el-toggle"
+  data-toggle="dropdown"
+  role="button"
+  aria-haspopup="true"
+  aria-expanded="true">
+  {{vm.errorCount()}} errors <span class="caret"></span>
+</a>
+<ul class="dropdown-menu el-menu">
+  <li data-ng-if="!!vm.gameErrorCount()" class="dropdown-header">Information Errors</li>
+  <li data-ng-if="!!vm.gameErrorCount()"
+    data-ng-repeat="gameError in vm.errorList.game">
+    <a href="" data-ng-click="gameError.action()">{{gameError.message()}}</a>
+  </li>
+
+  <li data-ng-if="!!vm.gameErrorCount() &amp;&amp; !!vm.cheatErrorCount()"
+    role="separator" class="divider">
+  </li>
+
+  <li data-ng-if="!!vm.cheatErrorCount()" class="dropdown-header">Cheats Errors</li>
+  <li data-ng-if="!!vm.cheatErrorCount()"
+    data-ng-repeat="cheatError in vm.errorList.cheat | limitTo:vm.maxCheatErrors">
+    <a href="" data-ng-click="cheatError.action()">{{cheatError.message()}}</a>
+  </li>
+  <li data-ng-if="!!vm.hiddenCheatErrorsCount()" class="dropdown-header">
+    {{vm.hiddenCheatErrorsCount()}} more...
+  </li>
+</ul>

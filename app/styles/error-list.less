@@ -1,0 +1,65 @@
+@import 'variables';
+
+error-list {
+  border-color: @dark-dark-gray;
+
+  .dropdown {
+    &.open {
+      .dropdown-toggle {
+        background-color: @dark-dark-gray;
+      }
+    }
+  }
+
+  .el-btn {
+    float: right;
+  }
+
+  .el-state {
+    color: @green;
+  }
+
+  .el-toggle {
+    color: @red;
+
+    &:hover, &:focus {
+      color: @red-hover;
+    }
+  }
+
+  a {
+    text-decoration: none;
+
+    &:hover, &:focus {
+      text-decoration: none;
+    }
+  }
+
+  ul.dropdown-menu.el-menu {
+    top: initial;
+    left: initial;
+    right: 35px;
+    background-color: @dark-dark-gray;
+    border-color: @dark-dark-gray;
+
+    .divider {
+      background-color: @dark-gray;
+    }
+
+    li {
+      &.dropdown-header {
+        color: @dark-red;
+      }
+
+      a {
+        color: @red;
+
+        &:hover,
+        &:focus {
+          color: @red-hover;
+          background-color: @dark-gray;
+        }
+      }
+    }
+  }
+}

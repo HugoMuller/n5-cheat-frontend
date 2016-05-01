@@ -70,6 +70,11 @@
       },
       defaults: {
         console: 'gameboy'
+      },
+      maxCheatErrorsDisplayed: 3,
+      anchors: {
+        bottom: 'btn-add-cheat',
+        up: ''
       }
     });
-})();
+}());
