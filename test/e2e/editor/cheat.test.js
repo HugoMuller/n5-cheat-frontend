@@ -2,12 +2,12 @@
 
 const elements = require('../utils/editor-elements.js');
 const expectation = require('../utils/expectation.js');
+const errors = require('../utils/error-list.js');
 
 const consoleDdl = elements.getDdlConsole();
 const cheatElementList = elements.getCheatElementList();
 const moreCheatButton = elements.getMoreCheatsButton();
 const xmlCheatCount = elements.getXmlCheatCount();
-const xmlErrorList = elements.getXmlInfoErrorList();
 
 const sampleCode = `abcdefghijklmnopqrstuvwxyz
 ABCDEFGHIJKLMNOPQRSTUVWXYZ
@@ -30,66 +30,134 @@ module.exports = {
 
 function addOneCheat(){
   browser.get('#/editor');
-
-  const expectValuesToBe = checkValuesOf(cheatElementList, xmlCheatCount, xmlErrorList);
   const cheat = elements.getCheatElementWrapper(0);
 
-  expectValuesToBe(0, '"0"', 'No valid cheat codes');
+  expect(cheatElementList.count()).toBe(0);
+  expect(xmlCheatCount.getText()).toBe('"0"');
+  errors.expect.toBeKoWith('Cheats Errors', 'No cheat code');
   expect(elements.getXmlCheatLines().count()).toBe(0);
+
   moreCheatButton.click();
-  expectValuesToBe(1, '"0"', 'No valid cheat codes');
+
+  expect(cheatElementList.count()).toBe(1);
+  expect(xmlCheatCount.getText()).toBe('"0"');
+  errors.expect.toBeKoWith('Cheats Errors', 'Cheat #1 has no name');
   expect(elements.getXmlCheatLines().count()).toBe(0);
   expect(elements.getCheatElementLegend(0).getText()).toBe('Cheat #1 remove');
   expectation.expectCheat(cheat).toHave('', '', 'GameShark', '');
   expect(cheat.placeHolder()).not.toBe('');
 
+  testFormat();
   testName();
   testHacker();
   testCode();
-  testFormat();
   testAll();
 
   //////////////////////////////////
 
+  function testFormat(){
+    resetCheat(cheat);
+    doTest('GameShark');
+    doTest('Game Genie');
+
+    function doTest(format){
+      cheat.format(format);
+
+      expect(cheat.format()).toBe(format);
+      expect(cheatElementList.count()).toBe(1);
+      expect(xmlCheatCount.getText()).toBe('"0"');
+      expect(elements.getXmlCheatLines().count()).toBe(0);
+
+      if(!format){
+        errors.expect.toContain('Cheat #1 has no format');
+      }else{
+        errors.expect.not.toContain('Cheat #1 has no format');
+      }
+    }
+  }
+
   function testName(){
-    [
-      'short name',
-      'very very very loooooong name, too much long, longer name ever written',
-      ''
-    ].forEach(testValueOf('name'));
+    resetCheat(cheat);
+    doTest('');
+    doTest('short name');
+    doTest('very very very loooooong name, too much long, longer name ever written');
+
+    function doTest(name){
+      cheat
+        .format('GameShark')
+        .name(name);
+
+      expect(cheat.name()).toBe(name.substr(0, 50));
+      expect(cheatElementList.count()).toBe(1);
+      expect(xmlCheatCount.getText()).toBe('"0"');
+      expect(elements.getXmlCheatLines().count()).toBe(0);
+      errors.expect.toBeKo();
+
+      if(!name){
+        errors.expect.toContain('Cheat #1 has no name');
+      }else{
+        errors.expect.not.toContain('Cheat #1 has no name');
+      }
+    }
   }
 
   function testHacker(){
-    [
-      'short hacker name',
-      'very very very loooooong hacker name, too much long, longer hacker name ever written',
-      ''
-    ].forEach(testValueOf('hacker'));
-  }
+    resetCheat(cheat);
+    doTest('');
+    doTest('short hacker name');
+    doTest('very very very loooooong hacker name, too much long, longer hacker name ever written');
 
-  function testFormat(){
-    [
-      'GameShark',
-      'Game Genie',
-      'GameShark'
-    ].forEach(testValueOf('format'));
+    function doTest(hacker){
+      cheat
+        .format('GameShark')
+        .name('name')
+        .hacker(hacker);
+
+      expect(cheat.hacker()).toBe(hacker.substr(0, 50));
+      expect(cheatElementList.count()).toBe(1);
+      expect(xmlCheatCount.getText()).toBe('"0"');
+      expect(elements.getXmlCheatLines().count()).toBe(0);
+    }
   }
 
   function testCode(){
-    [
-      sampleCode,
-      ''
-    ].forEach(testValueOf('code'));
+    resetCheat(cheat);
+    doTest('');
+    doTest(sampleCode);
+
+    function doTest(code){
+      let expectedCount = 0;
+      cheat
+        .format('GameShark')
+        .name('some name')
+        .code(code);
+
+      expect(cheat.code()).toBe(code);
+      expect(cheatElementList.count()).toBe(1);
+
+      if(!code){
+        errors.expect.toBeKoWith('Cheats Errors', 'Cheat #1 has invalid code');
+      }else{
+        expectedCount = 1;
+        errors.expect.toBeKoWithout('Cheats Errors');
+      }
+
+      expect(xmlCheatCount.getText()).toBe(`"${expectedCount}"`);
+      expect(elements.getXmlCheatLines().count()).toBe(expectedCount);
+    }
   }
 
   function testAll(){
+    resetCheat(cheat);
     cheat
       .name('some cheat')
       .format('GameShark')
       .code(sampleCode);
 
     expectation.expectCheat(cheat).toHave('some cheat', '', 'GameShark', sampleCode);
-    expectValuesToBe(1, '"1"', { not: 'No valid cheat codes' });
+    expect(cheatElementList.count()).toBe(1);
+    expect(xmlCheatCount.getText()).toBe('"1"');
+    errors.expect.toBeKoWithout('Cheats Errors');
     expect(elements.getXmlCheatLines().count()).toBe(1);
 
     const xmlCheat = elements.getXmlCheatWrapper(0);
@@ -97,28 +165,16 @@ function addOneCheat(){
 
     cheat.hacker('someone');
     expectation.expectCheat(cheat).toHave('some cheat', 'someone', 'GameShark', sampleCode);
-    expectValuesToBe(1, '"1"', { not: 'No valid cheat codes' });
+    expect(cheatElementList.count()).toBe(1);
+    expect(xmlCheatCount.getText()).toBe('"1"');
+    errors.expect.toBeKoWithout('Cheats Errors');
+
     expect(elements.getXmlCheatLines().count()).toBe(1);
     expectation.expectCheat(xmlCheat).toHave('"some cheat"', '"someone"', '"GameShark"', sampleCodeExpected.GameShark);
 
     cheat.format('Game Genie');
     expectation.expectCheat(cheat).toHave('some cheat', 'someone', 'Game Genie', sampleCode);
     expectation.expectCheat(xmlCheat).toHave('"some cheat"', '"someone"', '"Game Genie"', sampleCodeExpected['Game Genie']);
-  }
-  //////////////////////////////////
-
-  function testValueOf(property){
-    return (value) => {
-      let expected = value;
-      if(['name', 'hacker'].indexOf(property) !== -1){
-        expected = value.substr(0, 50);
-      }
-
-      cheat[property](value);
-      expect(cheat[property]()).toBe(expected);
-      expectValuesToBe(1, '"0"', 'No valid cheat codes');
-      expect(elements.getXmlCheatLines().count()).toBe(0);
-    };
   }
 }
 
@@ -127,12 +183,16 @@ function addOneCheat(){
 function removeOneCheat(){
   browser.get('#/editor');
 
-  const expectValuesToBe = checkValuesOf(cheatElementList, xmlCheatCount, xmlErrorList);
   const cheat = elements.getCheatElementWrapper(0);
 
-  expectValuesToBe(0, '"0"', 'No valid cheat codes');
+  expect(cheatElementList.count()).toBe(0);
+  expect(xmlCheatCount.getText()).toBe('"0"');
+  errors.expect.toBeKoWith('Cheats Errors', 'No cheat code');
+
   moreCheatButton.click();
-  expectValuesToBe(1, '"0"', 'No valid cheat codes');
+  expect(cheatElementList.count()).toBe(1);
+  expect(xmlCheatCount.getText()).toBe('"0"');
+  errors.expect.toBeKoWith('Cheats Errors', 'Cheat #1 has no name');
   expect(elements.getXmlCheatLines().count()).toBe(0);
 
   expect(elements.getCheatElementLegend(0).getText()).toBe('Cheat #1 remove');
@@ -143,14 +203,18 @@ function removeOneCheat(){
     .format('GameShark')
     .code(sampleCode);
 
-  expectValuesToBe(1, '"1"', { not: 'No valid cheat codes' });
+  expect(cheatElementList.count()).toBe(1);
+  expect(xmlCheatCount.getText()).toBe('"1"');
+  errors.expect.toBeKoWithout('Cheats Errors');
   expect(elements.getXmlCheatLines().count()).toBe(1);
 
   const xmlCheat = elements.getXmlCheatWrapper(0);
   expectation.expectCheat(xmlCheat).toHave('"some cheat"', '"someone"', '"GameShark"', sampleCodeExpected.GameShark);
 
   elements.getCheatRemoveButton(0).click();
-  expectValuesToBe(0, '"0"', 'No valid cheat codes');
+  expect(cheatElementList.count()).toBe(0);
+  expect(xmlCheatCount.getText()).toBe('"0"');
+  errors.expect.toBeKoWith('Cheats Errors', 'No cheat code');
   expect(elements.getXmlCheatLines().count()).toBe(0);
 }
 
@@ -159,7 +223,6 @@ function removeOneCheat(){
 function addCheats(){
   browser.get('#/editor');
 
-  const expectValuesToBe = checkValuesOf(cheatElementList, xmlCheatCount, xmlErrorList);
   const cheats = [
     elements.getCheatElementWrapper(0),
     elements.getCheatElementWrapper(1)
@@ -168,15 +231,21 @@ function addCheats(){
     elements.getXmlCheatWrapper(0),
     elements.getXmlCheatWrapper(1)
   ];
+  const expectedErrors = [];
 
-  expectValuesToBe(0, '"0"', 'No valid cheat codes');
+  expect(cheatElementList.count()).toBe(0);
+  expect(xmlCheatCount.getText()).toBe('"0"');
+  errors.expect.toBeKoWith('Cheats Errors', 'No cheat code');
   expect(elements.getXmlCheatLines().count()).toBe(0);
 
   for(let j=0; j<cheats.length; j++){
     moreCheatButton.click();
+    expectedErrors.push(`Cheat #${j+1} has no name`);
   }
 
-  expectValuesToBe(cheats.length, '"0"', 'No valid cheat codes');
+  expect(cheatElementList.count()).toBe(cheats.length);
+  expect(xmlCheatCount.getText()).toBe('"0"');
+  errors.expect.toBeKoWith('Cheats Errors', expectedErrors);
   expect(elements.getXmlCheatLines().count()).toBe(0);
 
   cheats.forEach((cheat, i) => {
@@ -199,7 +268,9 @@ function addCheats(){
     .code('ABCDEF');
 
   expect(elements.getXmlCheatLines().count()).toBe(cheats.length);
-  expectValuesToBe(cheats.length, `"${cheats.length}"`, { not: 'No valid cheat codes' });
+  expect(cheatElementList.count()).toBe(cheats.length);
+  expect(xmlCheatCount.getText()).toBe(`"${cheats.length}"`);
+  errors.expect.toBeKoWithout('Cheats Errors');
 
   expectation.expectCheat(cheats[0]).toHave('some cheat', 'someone', 'GameShark', '1234567812345678');
   expectation.expectCheat(cheats[1]).toHave('another cheat', 'another guy', 'Game Genie', 'ABCDEF');
@@ -213,19 +284,24 @@ function addCheats(){
 function removeCheats(){
   browser.get('#/editor');
 
-  const expectValuesToBe = checkValuesOf(cheatElementList, xmlCheatCount, xmlErrorList);
   const cheat = elements.getCheatElementWrapper;
   const xmlCheat = elements.getXmlCheatWrapper;
   let cheatCount = 3;
+  const expectedErrors = [];
 
-  expectValuesToBe(0, '"0"', 'No valid cheat codes');
+  expect(cheatElementList.count()).toBe(0);
+  expect(xmlCheatCount.getText()).toBe('"0"');
+  errors.expect.toBeKoWith('Cheats Errors', 'No cheat code');
   expect(elements.getXmlCheatLines().count()).toBe(0);
 
   for(let j=0; j<cheatCount; j++){
     moreCheatButton.click();
+    expectedErrors.push(`Cheat #${j+1} has no name`);
   }
 
-  expectValuesToBe(cheatCount, '"0"', 'No valid cheat codes');
+  expect(cheatElementList.count()).toBe(cheatCount);
+  expect(xmlCheatCount.getText()).toBe('"0"');
+  errors.expect.toBeKoWith('Cheats Errors', expectedErrors);
   expect(elements.getXmlCheatLines().count()).toBe(0);
 
   cheat(0)
@@ -247,7 +323,9 @@ function removeCheats(){
     .code('01CDEF01');
 
   expect(elements.getXmlCheatLines().count()).toBe(cheatCount);
-  expectValuesToBe(cheatCount, `"${cheatCount}"`, { not: 'No valid cheat codes' });
+  expect(cheatElementList.count()).toBe(cheatCount);
+  expect(xmlCheatCount.getText()).toBe(`"${cheatCount}"`);
+  errors.expect.toBeKoWithout('Cheats Errors');
 
   deleteCheat(1);
   checkCheat(
@@ -276,12 +354,14 @@ function removeCheats(){
     elements.getCheatRemoveButton(id).click();
     cheatCount--;
     expect(elements.getXmlCheatLines().count()).toBe(cheatCount);
+    expect(cheatElementList.count()).toBe(cheatCount);
+    expect(xmlCheatCount.getText()).toBe(`"${cheatCount}"`);
 
-    let expectedError = 'No valid cheat codes';
     if(cheatCount > 0){
-      expectedError = { not: expectedError };
+      errors.expect.toBeKoWithout('Cheats Errors');
+    }else{
+      errors.expect.toBeKoWith('Cheats Errors', 'No cheat code');
     }
-    expectValuesToBe(cheatCount, `"${cheatCount}"`, expectedError);
   }
 
   function checkCheat(id, cheatProperties, xmlCheatValues){
@@ -296,7 +376,6 @@ function removeCheats(){
 function consoleChanges(){
   browser.get('#/editor');
 
-  const expectValuesToBe = checkValuesOf(cheatElementList, xmlCheatCount, xmlErrorList);
   const cheat = elements.getCheatElementWrapper(0);
 
   expect(elements.getXmlCheatLines().count()).toBe(0);
@@ -315,7 +394,10 @@ function consoleChanges(){
     .code(sampleCode);
 
   expectation.expectCheat(cheat).toHave('some cheat', 'someone', 'GameShark', sampleCode);
-  expectValuesToBe(1, '"1"', { not: 'No valid cheat codes' });
+  expect(cheatElementList.count()).toBe(1);
+  expect(xmlCheatCount.getText()).toBe('"1"');
+  errors.expect.toBeKoWithout('Cheats Errors');
+
   expect(elements.getXmlCheatLines().count()).toBe(1);
 
   const xmlCheat = elements.getXmlCheatWrapper(0);
@@ -334,17 +416,10 @@ function consoleChanges(){
 
 ///////////////////////////////////////////////////////////////////////////
 
-function checkValuesOf(cheatCount, _xmlCheatCount, _xmlErrorList){
-  return (expectedCheatCount, expectedXmlcheatCount, expectedXmlError) => {
-    let expectXmlErrorList = expect(_xmlErrorList.getText());
-    let expectedError = expectedXmlError;
-    if(expectedXmlError.hasOwnProperty('not')){
-      expectXmlErrorList = expectXmlErrorList.not;
-      expectedError = expectedError.not;
-    }
-
-    expect(cheatCount.count()).toBe(expectedCheatCount);
-    expect(_xmlCheatCount.getText()).toBe(expectedXmlcheatCount);
-    expectXmlErrorList.toContain(expectedError);
-  };
+function resetCheat(cheat){
+  cheat
+    .name('')
+    .hacker('')
+    .format('GameShark')
+    .code('');
 }

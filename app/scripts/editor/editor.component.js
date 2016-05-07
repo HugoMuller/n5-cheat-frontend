@@ -64,7 +64,7 @@
     }
 
     function countCheats(){
-      return validCheatsFilter(vm.content.cheats).length;
+      return validCheatsFilter(vm.content.cheats, vm.content.console).length;
     }
 
     function getAvailableFormats(){

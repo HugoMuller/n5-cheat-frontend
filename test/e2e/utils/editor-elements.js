@@ -21,8 +21,10 @@ module.exports = {
 
   getEditorRight,
   getXmlInfoErrorContainer,
+  getXmlInfoErrorListContainer,
   getXmlInfoErrorList,
-  getXmlInfoSuccessContainer,
+  getXmlInfoErrorHeaders,
+  getXmlInfoErrorButton,
 
   getXmlCompiledContainer,
   getXmlGameTitle,
@@ -119,15 +121,23 @@ function getEditorRight(){
 }
 
 function getXmlInfoErrorContainer(){
-  return getEditorRight().$('div.xml-info.xml-info-error');
+  return getEditorRight().$('error-list');
+}
+
+function getXmlInfoErrorListContainer(){
+  return getXmlInfoErrorContainer().$('ul');
 }
 
 function getXmlInfoErrorList(){
-  return getXmlInfoErrorContainer().$$('ul > li');
+  return getXmlInfoErrorContainer().$$('ul > li:not(.dropdown-header)');
 }
 
-function getXmlInfoSuccessContainer(){
-  return getEditorRight().$('div.xml-info.xml-info-success');
+function getXmlInfoErrorHeaders(){
+  return getXmlInfoErrorContainer().$$('ul > li.dropdown-header');
+}
+
+function getXmlInfoErrorButton(){
+  return getXmlInfoErrorContainer().$$('.el-btn').first();
 }
 
 ///////////////////////////////////////////////////////////////////////////

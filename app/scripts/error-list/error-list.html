@@ -1,5 +1,5 @@
-<span data-ng-hide="!!vm.errorCount()" href="" class="el-btn el-state">OK</span>
-<a data-ng-show="!!vm.errorCount()"
+<span data-ng-if="!vm.errorCount()" href="" class="el-btn el-state">OK</span>
+<a data-ng-if="!!vm.errorCount()"
   href=""
   class="dropdown-toggle el-btn el-toggle"
   data-toggle="dropdown"

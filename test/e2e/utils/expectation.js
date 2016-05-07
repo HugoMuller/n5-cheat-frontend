@@ -1,7 +1,11 @@
 'use strict';
 
 module.exports = {
-  expectCheat
+  expectCheat,
+  toContainSeveral: containSeveral(true),
+  not: {
+    toContainSeveral: containSeveral(false)
+  }
 };
 
 function expectCheat(cheat){
@@ -16,4 +20,13 @@ function expectCheat(cheat){
     expect(cheat.format()).toBe(format);
     expect(cheat.code()).toBe(code);
   }
+}
+
+function containSeveral(to){
+  return (arr, items) => {
+    const expectation = to ? expect(arr) : expect(arr).not;
+    items = Array.isArray(items) ? items : [items];
+
+    items.forEach((item) => expectation.toContain(item));
+  };
 }

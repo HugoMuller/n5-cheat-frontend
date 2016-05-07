@@ -1,14 +1,9 @@
 'use strict';
 
 const elements = require('../utils/editor-elements.js');
+const errors = require('../utils/error-list.js');
 const expectation = require('../utils/expectation.js');
 
-const xmlExpectedErrors = [
-  'No game title',
-  'No valid version CRC',
-  'No version title',
-  'No valid cheat codes'
-];
 const sampleCode = `abcdefghijklmnopqrstuvwxyz
 ABCDEFGHIJKLMNOPQRSTUVWXYZ
 012345679:0123 456 789:0,1&~#!`;
@@ -23,7 +18,6 @@ function completeXml(){
 
   gameInfoShouldBe('', '', '');
   cheatStatusShouldBe(0, '"0"', false);
-  expect(elements.getXmlInfoErrorList().getText()).toEqual(xmlExpectedErrors);
 
   elements.getInputGameTitle().clear().sendKeys('Some Game');
   elements.getInputVersionCrc().clear().sendKeys('0123ABCD');
@@ -41,7 +35,7 @@ function completeXml(){
 
   gameInfoShouldBe('Some Game', '0123ABCD', 'Some info');
   cheatStatusShouldBe(1, '"1"', true);
-  expect(elements.getXmlInfoSuccessContainer().getText()).toBe('XML is well formed');
+
   expectation.expectCheat(cheat).toHave('some cheat', 'someone', 'GameShark', sampleCode);
   expectation.expectCheat(xmlCheat).toHave('"some cheat"', '"someone"', '"GameShark"', sampleCodeExpected);
 
@@ -62,10 +56,23 @@ function completeXml(){
     expect(elements.getXmlVersionTitle().getText()).toBe(`"${versionTitle}"`);
   }
 
-  function cheatStatusShouldBe(cheatCount, xmlCheatCount, xmlInfoSuccessVisible){
+  function cheatStatusShouldBe(cheatCount, xmlCheatCount, isOk){
     expect(elements.getCheatElementList().count()).toBe(cheatCount);
     expect(elements.getXmlCheatCount().getText()).toBe(xmlCheatCount);
-    expect(elements.getXmlInfoSuccessContainer().isPresent()).toBe(xmlInfoSuccessVisible);
-    expect(elements.getXmlInfoErrorContainer().isPresent()).toBe(!xmlInfoSuccessVisible);
+
+    if(isOk){
+      errors.expect.toBeOk();
+    }else{
+      errors.expect.toBeKoWith(
+        [
+          'Information Errors',
+          'Cheats Errors'
+        ], [
+          'Invalid game title',
+          'Invalid version CRC',
+          'Invalid version title',
+          'No cheat code'
+        ]);
+    }
   }
 }
