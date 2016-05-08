@@ -1,7 +1,8 @@
 (function(){
   'use strict';
 
-  let cheatService;
+  let cheatFactory;
+  let createCheat;
   let controller;
   let $anchorScroll;
   let $compile;
@@ -121,6 +122,9 @@
       'onVersionTitleChanges',
       'onAddCheat'
     ].forEach((fn) => should(controller[fn]).be.a.Function());
+
+    should(cheatFactory.create.callCount).equal(1);
+    should(cheatFactory.create.args[0][0]).equal(controller.content.cheats);
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -133,9 +137,11 @@
     should(getCheatElemCount()).equal(0);
 
     for(let i=1; i<5; i++){
+      createCheat.reset();
       controller.onAddCheat.reset();
       controller.addCheat();
 
+      should(createCheat.callCount).equal(1);
       should(controller.content.cheats.length).equal(i);
       should(getCheatElemCount()).equal(i);
       should($timeout.callCount).equal(1);
@@ -158,7 +164,7 @@
   function removeCheatTest(){
     controller = createWithParams({
       content: {
-        cheats: [cheatService()]
+        cheats: [createCheat()]
       }
     });
 
@@ -373,7 +379,7 @@
   //////////////////////////////////////////////////////////////////////////////
 
   function onAddCheatRemoveNoCheatTest(){
-    const cheat = cheatService();
+    const cheat = createCheat();
     controller = createWithParams({
       content: { cheats: [cheat] },
       errorList: {
@@ -389,7 +395,7 @@
 
   function onAddCheatRemoveErrorTest(){
     const id = 0;
-    const cheat = cheatService();
+    const cheat = createCheat();
     controller = createWithParams({
       content: { cheats: [cheat] },
       errorList: {
@@ -406,7 +412,7 @@
 
   function onAddCheatAddNameErrorTest(){
     const id = 0;
-    const cheat = cheatService();
+    const cheat = createCheat();
     cheat.name = '';
     cheat.isValid.returns(false);
     cheat.formatedCode.returns(true);
@@ -423,7 +429,7 @@
 
   function onAddCheatAddCodeErrorTest(){
     const id = 0;
-    const cheat = cheatService();
+    const cheat = createCheat();
     cheat.isValid.returns(false);
     cheat.formatedCode.returns(false);
 
@@ -438,7 +444,7 @@
 
   function onAddCheatAddFormatErrorTest(){
     const id = 0;
-    const cheat = cheatService();
+    const cheat = createCheat();
     cheat.format = '';
     cheat.isValid.returns(false);
     cheat.formatedCode.returns(true);
@@ -466,7 +472,7 @@
     $timeout = sinon.stub();
     validCheatsFilter = sinon.stub().returns([]);
 
-    cheatService = sinon.stub().returns({
+    createCheat = sinon.stub().returns({
       id: 0,
       format: 'format',
       hacker: 'hacker',
@@ -475,12 +481,16 @@
       isValid: sinon.stub().returns(true),
       formatedCode: sinon.stub()
     });
+    cheatFactory = {
+      create: sinon.stub()
+    };
+    cheatFactory.create.returns(createCheat);
 
     module(($provide) => {
       $provide.value('$anchorScroll', $anchorScroll);
       $provide.value('$timeout', $timeout);
       $provide.value('validCheatsFilter', validCheatsFilter);
-      $provide.value('cheatService', cheatService);
+      $provide.value('cheatFactory', cheatFactory);
     });
   }
 

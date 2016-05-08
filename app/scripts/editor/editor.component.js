@@ -12,9 +12,10 @@
 
   //////////////////////////////////////////////////////////////////////////////
 
-  EditorCtrl.$inject = ['$scope', '$compile', '$anchorScroll', '$timeout', 'cheatService', 'validCheatsFilter', 'ENV'];
+  EditorCtrl.$inject = ['$scope', '$compile', '$anchorScroll', '$timeout', 'cheatFactory', 'validCheatsFilter', 'ENV'];
 
-  function EditorCtrl($scope, $compile, $anchorScroll, $timeout, cheatService, validCheatsFilter, ENV){
+  function EditorCtrl($scope, $compile, $anchorScroll, $timeout, cheatFactory, validCheatsFilter, ENV){
+    let createCheat;
     const vm = this;
 
     vm.addCheat = addCheat;
@@ -36,7 +37,7 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function addCheat(){
-      const cheat = cheatService(vm.content.cheats);
+      const cheat = createCheat();
       const id = cheat.id;
       vm.content.cheats.push(cheat);
 
@@ -107,6 +108,7 @@
         },
       };
 
+      createCheat = cheatFactory.create(vm.content.cheats);
       getAvailableFormats();
       setNoCheatError();
     }
