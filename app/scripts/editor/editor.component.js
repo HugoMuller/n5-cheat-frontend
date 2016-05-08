@@ -24,6 +24,7 @@
     vm.hasGameTitle = hasGameTitle;
     vm.hasVersionCrc = hasVersionCrc;
     vm.hasVersionTitle = hasVersionTitle;
+    vm.getCheatById = getCheatById;
     //triggers
     vm.onGameTitleChanges = onGameTitleChanges;
     vm.onVersionCrcChanges = onVersionCrcChanges;
@@ -35,12 +36,12 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function addCheat(){
-      const id = vm.content.cheats.length;
       const cheat = cheatService(vm.content.cheats);
+      const id = cheat.id;
       vm.content.cheats.push(cheat);
 
       const elem = `<cheat id="cheat-${id}"
-        cheat="vm.content.cheats[${id}]"
+        cheat="vm.getCheatById(${id})"
         formats="vm.availableFormats"
         remove-cheat="vm.removeCheat(${id})"
         manage-error="vm.onAddCheat(${id}, cheat)"></cheat>`;
@@ -59,7 +60,7 @@
         .element(document.getElementById(`cheat-${id}`))
         .remove();
 
-      delete vm.content.cheats[id];
+      _.remove(vm.content.cheats, { id });
       onRemoveCheat(id);
     }
 
@@ -81,6 +82,10 @@
 
     function hasVersionTitle(){
       return !!vm.content.version.title;
+    }
+
+    function getCheatById(id){
+      return _.find(vm.content.cheats, { id });
     }
 
     ///////////////////////////////////////////////////////////////////////////

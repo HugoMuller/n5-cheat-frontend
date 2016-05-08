@@ -55,6 +55,10 @@
       it('should return false', hasVersionTitleFalsyTest);
     });
 
+    describe('.getCheatById', () => {
+      it('should return the right cheat', getCheatByIdTest);
+    });
+
     describe('.onGameTitleChanges', () => {
       it('should delete the gameTitle error if game title is set', onGameTitleChangesTruthyTest);
       it('should set the gameTitle error if game has no title', onGameTitleChangesFalsyTest);
@@ -274,6 +278,21 @@
   function hasVersionTitleFalsyTest(){
     controller = createWithParams();
     should(controller.hasVersionTitle()).be.false();
+  }
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  function getCheatByIdTest(){
+    const cheats = [
+      { id: 10 },
+      { id: 11 },
+      { id: 12 }
+    ];
+    controller = createWithParams({ content: { cheats } });
+    should(controller.getCheatById(10)).equal(cheats[0]);
+    should(controller.getCheatById(11)).equal(cheats[1]);
+    should(controller.getCheatById(12)).equal(cheats[2]);
+    should(controller.getCheatById(13)).be.undefined();
   }
 
   //////////////////////////////////////////////////////////////////////////////
