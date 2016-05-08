@@ -8,6 +8,7 @@
 .xml-info {
   position: relative;
   overflow: auto;
+  max-height: 95%;
 }
 
 .xml-line {
@@ -16,6 +17,12 @@
 
   & > span {
     font-size: medium;
+  }
+}
+
+.xml-line-comment {
+  & > span {
+    color: @gray !important;
   }
 }
 

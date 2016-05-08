@@ -163,11 +163,11 @@ function getXmlVersionTitle(){
 }
 
 function getXmlCheatLines(){
-  return getXmlCompiledContainer().all(by.repeater('cheat in vm.content.cheats | validCheats'));
+  return getXmlCompiledContainer().all(by.repeater('cheat in vm.content.cheats'));
 }
 
 function getXmlCheatLine(id){
-  return getXmlCompiledContainer().element(by.repeater('cheat in vm.content.cheats | validCheats').row(id));
+  return getXmlCompiledContainer().element(by.repeater('cheat in vm.content.cheats').row(id));
 }
 
 function getXmlCheatWrapper(id){
