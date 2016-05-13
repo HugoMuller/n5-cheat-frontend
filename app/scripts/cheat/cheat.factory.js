@@ -28,6 +28,7 @@
         const cheat = {};
 
         cheat.id = uniqueId();
+        cheat.console = '';
         cheat.format = '';
         cheat.hacker = '';
         cheat.name = '';
@@ -45,15 +46,15 @@
           return _.findIndex(cheats, { id: cheat.id }) + 1;
         }
 
-        function formatedCode(console){
-          return formatCodeFilter(cheat.code, cheat.format, console);
+        function formatedCode(){
+          return formatCodeFilter(cheat.code, cheat.format, cheat.console);
         }
 
-        function isValid(console){
+        function isValid(){
           const _isValid = cheat.format &&
             cheat.name &&
             angular.isFunction(cheat.formatedCode) &&
-            cheat.formatedCode(console);
+            cheat.formatedCode(cheat.console);
 
           return !!_isValid;
         }

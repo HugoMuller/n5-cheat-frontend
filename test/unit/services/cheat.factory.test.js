@@ -82,7 +82,7 @@
   function formatedCodeTest(){
     const createCheat = cheatFactory.create([]);
     const cheat = createCheat();
-    const console = 'console';
+    cheat.console = 'console';
 
     doTest(true);
     doTest(false);
@@ -91,11 +91,12 @@
       formatCodeFilter.reset();
       formatCodeFilter.returns(expected);
 
-      should(cheat.formatedCode(console)).equal(expected);
+      should(cheat.formatedCode()).equal(expected);
       should(formatCodeFilter.callCount).equal(1);
+      should(formatCodeFilter.args[0].length).equal(3);
       should(formatCodeFilter.args[0][0]).equal(cheat.code);
       should(formatCodeFilter.args[0][1]).equal(cheat.format);
-      should(formatCodeFilter.args[0][2]).equal(console);
+      should(formatCodeFilter.args[0][2]).equal(cheat.console);
     }
   }
 
@@ -112,7 +113,7 @@
     cheat.format ='format';
     should(cheat.isValid(console)).equal(true);
     should(cheat.formatedCode.callCount).equal(1);
-    should(cheat.formatedCode.args[0][0]).equal(console);
+    //should(cheat.formatedCode.args[0][0]).equal(console);
   }
 
   function isValidFalsyTest(){

@@ -8,6 +8,7 @@
       templateUrl: 'scripts/cheat/cheat.html',
       controller: 'CheatCtrl as vm',
       bindings: {
+        console: '<',
         cheat: '=',
         formats: '<',
         removeCheat: '&',
@@ -29,13 +30,19 @@
     vm.onFormatChanges = onFormatChanges;
 
     function $onInit(){
+      vm.cheat.console = vm.console;
       initCheatFormat(vm.formats);
     }
 
     function $onChanges(changesObj){
+      if(changesObj.console){
+        vm.cheat.console = changesObj.console.currentValue;
+      }
+
       if(changesObj.formats){
         initCheatFormat(changesObj.formats.currentValue);
       }
+      vm.updateError();
     }
 
     function updatePlaceHolder(){

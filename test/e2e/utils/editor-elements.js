@@ -176,7 +176,7 @@ function getXmlCheatWrapper(id){
     name: xmlAttr('cheat.name'),
     hacker: xmlAttr("cheat.hacker || 'Unknown'"),
     format: xmlAttr('cheat.format'),
-    code: xmlAttr('cheat.code | formatCode:cheat.format:vm.content.console')
+    code: xmlAttr('cheat.formatedCode()')
   };
 
   return wrapper;

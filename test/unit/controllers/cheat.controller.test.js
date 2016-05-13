@@ -157,6 +157,7 @@
     should(controller.updatePlaceHolder.callCount).equal(1);
     should(controller.cheat.format).equal(formats[0].format);
     should(controller.placeHolder).equal(formats[0].sample);
+    should(controller.manageError.callCount).be.above(0);
   }
 
   function $onChangesNoneTest(){
@@ -167,6 +168,7 @@
     should(controller.updatePlaceHolder.callCount).equal(0);
     should(controller.cheat.format).equal('format');
     should(controller.placeHolder).equal('sample');
+    should(controller.manageError.callCount).be.above(0);
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -213,8 +215,10 @@
 
   function createAndSpy(){
     controller = createWithParams({
+      console: 'gameboy',
       cheat: { format: '' },
-      formats: []
+      formats: [],
+      manageError: sinon.stub()
     });
     sinon.spy(controller, 'updatePlaceHolder');
     sinon.spy(controller, 'updateError');

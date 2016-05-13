@@ -1,5 +1,15 @@
 <div class="cheat fieldset">
-  <div class="fieldset-legend">Cheat #{{vm.cheat.computeCheatId()}} <a class="btn btn-remove" href="" data-ng-click="vm.removeCheat()">remove</a></div>
+  <div class="fieldset-legend">
+    Cheat #{{vm.cheat.computeCheatId()}}
+    <a class="btn btn-remove" href="" data-ng-click="vm.removeCheat()">
+      <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+      remove
+    </a>
+    <span class="glyphicon cheat-status"
+      ng-class="{ 'glyphicon-ok-sign cheat-status-ok': vm.cheat.isValid(), 'glyphicon-remove-sign cheat-status-ko': !vm.cheat.isValid() }"
+      aria-hidden="true">
+    </span>
+  </div>
 
   <div class="fieldset-content">
     <div class="row">

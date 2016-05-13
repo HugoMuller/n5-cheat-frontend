@@ -42,6 +42,7 @@
       vm.content.cheats.push(cheat);
 
       const elem = `<cheat id="cheat-${id}"
+        console="vm.content.console"
         cheat="vm.getCheatById(${id})"
         formats="vm.availableFormats"
         remove-cheat="vm.removeCheat(${id})"
@@ -152,7 +153,7 @@
     function onAddCheat(id, cheat){
       delete vm.errorList.cheat.noCheat;
 
-      if(cheat.isValid(vm.content.console)){
+      if(cheat.isValid()){
         return delete vm.errorList.cheat[id];
       }
 
@@ -182,7 +183,7 @@
         if(!cheat.format) return item.format;
         if(!cheat.name) return item.name;
 
-        if(!cheat.formatedCode(vm.content.console)){
+        if(!cheat.formatedCode()){
           return item.code;
         }
       }

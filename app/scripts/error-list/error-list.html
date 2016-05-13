@@ -1,4 +1,8 @@
-<span data-ng-if="!vm.errorCount()" href="" class="el-btn el-state">OK</span>
+<span data-ng-if="!vm.errorCount()" href="" class="el-btn el-state">
+  <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+  OK
+</span>
+
 <a data-ng-if="!!vm.errorCount()"
   href=""
   class="dropdown-toggle el-btn el-toggle"
@@ -6,8 +10,11 @@
   role="button"
   aria-haspopup="true"
   aria-expanded="true">
-  {{vm.errorCount()}} errors <span class="caret"></span>
+  <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>
+  {{vm.errorCount()}} errors
+  <span class="caret"></span>
 </a>
+
 <ul class="dropdown-menu el-menu">
   <li data-ng-if="!!vm.gameErrorCount()" class="dropdown-header">Information Errors</li>
   <li data-ng-if="!!vm.gameErrorCount()"

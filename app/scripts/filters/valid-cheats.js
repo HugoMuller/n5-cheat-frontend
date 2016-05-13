@@ -8,10 +8,10 @@
   //////////////////////////////////////////////////////////////////////////////
 
   function validCheats(){
-    return (cheats, console) => cheats
+    return (cheats) => cheats
       .filter((cheat) => cheat &&
         angular.isFunction(cheat.isValid) &&
-        cheat.isValid(console)
+        cheat.isValid()
       );
   }
 }());

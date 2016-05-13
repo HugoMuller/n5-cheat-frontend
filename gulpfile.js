@@ -17,6 +17,7 @@ const yeoman = {
 };
 
 const paths = {
+  fonts: [`${yeoman.app}/fonts/**/*`, `${yeoman.bowerDir}/bootstrap/fonts/**/*`],
   scripts: [`${yeoman.app}/scripts/**/*.js`, `${yeoman.app}/config/*.js`, `${yeoman.app}/app.js`, `${yeoman.app}/app.module.js`],
   styles: [`${yeoman.app}/styles/main.less`],
   allStyles: {
@@ -39,11 +40,13 @@ const styles = lazypipe()
   .pipe($.autoprefixer, 'last 1 version')
   .pipe(gulp.dest, `${yeoman.tmp}/styles`);
 
+const allStyles = () => gulp.src(paths.styles).pipe(styles());
+
 ///////////
 // Tasks //
 ///////////
 
-gulp.task('styles', () => gulp.src(paths.styles).pipe(styles()));
+gulp.task('styles', allStyles);
 
 gulp.task('clean:tmp', (cb) => {
   rimraf(`./${yeoman.tmp}`, cb);
@@ -65,7 +68,7 @@ gulp.task('start:server', () => {
 gulp.task('watch', () => {
   $.watch(paths.allStyles.less)
     .pipe($.plumber())
-    .pipe(styles())
+    .pipe(allStyles())
     .pipe($.connect.reload());
 
   $.watch(paths.allStyles.css)
@@ -92,10 +95,12 @@ gulp.task('watch', () => {
 });
 
 gulp.task('serve', (cb) => {
-  runSequence('clean:tmp',
-  'start:client',
-  'watch',
-  cb);
+  runSequence(
+    'clean:tmp',
+    'start:client',
+    'watch',
+    cb
+  );
 });
 
 gulp.task('serve:prod', () => {
@@ -162,6 +167,11 @@ gulp.task('html', () => {
     .pipe(gulp.dest(`${yeoman.dist}/scripts`));
 });
 
+gulp.task('copy:fonts', () =>
+  gulp.src(paths.fonts)
+    .pipe(gulp.dest(`${yeoman.dist}/fonts`))
+);
+
 gulp.task('copy:dev', ['copy:devStyles'], () =>
   gulp
     .src(`${yeoman.bowerDir}/**/*`)
@@ -175,7 +185,7 @@ gulp.task('copy:devStyles', ['styles'], () =>
 );
 
 gulp.task('build', ['clean:dist'], () => {
-  runSequence('client:build');
+  runSequence(['copy:fonts', 'client:build']);
 });
 
 gulp.task('default', ['build']);
