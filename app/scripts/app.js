@@ -12,10 +12,10 @@
   function configuration($routeProvider, $compileProvider, ENV){
     $routeProvider
       .when('/', {
-        templateUrl: 'views/main.html'
+        template: '<home></home>'
       })
       .when('/editor', {
-        templateUrl: 'views/editor.html'
+        template: '<editor></editor>'
       })
       .otherwise({
         redirectTo: '/'

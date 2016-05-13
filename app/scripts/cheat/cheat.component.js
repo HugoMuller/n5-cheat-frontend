@@ -42,6 +42,7 @@
       if(changesObj.formats){
         initCheatFormat(changesObj.formats.currentValue);
       }
+
       vm.updateError();
     }
 

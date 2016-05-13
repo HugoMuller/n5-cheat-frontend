@@ -26,7 +26,6 @@ const paths = {
   },
   views: {
     main: `${yeoman.app}/index.html`,
-    files: `${yeoman.app}/views/**/*.html`,
     directives: `${yeoman.app}/scripts/**/*.html`
   }
 };
@@ -76,10 +75,6 @@ gulp.task('watch', () => {
     .pipe($.connect.reload());
 
   $.watch(paths.views.main)
-    .pipe($.plumber())
-    .pipe($.connect.reload());
-
-  $.watch(paths.views.files)
     .pipe($.plumber())
     .pipe($.connect.reload());
 
@@ -158,10 +153,6 @@ gulp.task('client:build', ['html', 'styles'], () => {
 });
 
 gulp.task('html', () => {
-  gulp
-    .src(paths.views.files)
-    .pipe(gulp.dest(`${yeoman.dist}/views`));
-
   gulp
     .src(paths.views.directives)
     .pipe(gulp.dest(`${yeoman.dist}/scripts`));

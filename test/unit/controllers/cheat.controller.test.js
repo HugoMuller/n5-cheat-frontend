@@ -29,6 +29,7 @@
     describe('.$onChanges', () => {
       beforeEach(createAndSpy);
 
+      it('should update cheat console if selected console has changed in game info', $onChangesConsoleTest);
       it('should update cheat format and placeholder if selected format has changed', $onChangesTest);
       it('should do nothing if no change happened', $onChangesNoneTest);
 
@@ -137,6 +138,18 @@
   }
 
   //////////////////////////////////////////////////////////////////////////////
+
+  function $onChangesConsoleTest(){
+    const console = 'console';
+
+    controller.console = console;
+    controller.$onChanges({
+      console: { currentValue: console }
+    });
+
+    should(controller.cheat.console).equal(console);
+    should(controller.manageError.callCount).be.above(0);
+  }
 
   function $onChangesTest(){
     const formats = [

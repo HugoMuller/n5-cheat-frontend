@@ -192,8 +192,7 @@
     function onRemoveCheat(id){
       delete vm.errorList.cheat[id];
 
-      if(document.querySelectorAll('cheat').length === 0){
-        vm.content.cheats.length = 0;
+      if(!document.querySelectorAll('cheat').length){
         setNoCheatError();
       }
     }
