@@ -412,6 +412,25 @@ function consoleChanges(){
 
   expect(cheat.placeHolder()).not.toBe('');
   expect(cheat.placeHolder()).not.toBe(oldPlaceHolder);
+
+  elements.getCheatRemoveButton(0).click();
+  expect(elements.getXmlCheatLines().count()).toBe(0);
+  expect(cheatElementList.count()).toBe(0);
+  moreCheatButton.click();
+  expect(elements.getXmlCheatLines().count()).toBe(1);
+  expect(cheatElementList.count()).toBe(1);
+
+  cheat
+    .name('some cheat')
+    .hacker('someone')
+    .code(sampleCode);
+
+  expectation.expectCheat(cheat).toHave('some cheat', 'someone', 'Raw', sampleCode);
+  expectation.expectCheat(xmlCheat).toHave('"some cheat"', '"someone"', '"Raw"', sampleCodeExpected.Raw);
+
+  consoleDdl('Game Boy');
+  expectation.expectCheat(cheat).toHave('some cheat', 'someone', 'GameShark', sampleCode);
+  expectation.expectCheat(xmlCheat).toHave('"some cheat"', '"someone"', '"GameShark"', sampleCodeExpected.GameShark);
 }
 
 ///////////////////////////////////////////////////////////////////////////

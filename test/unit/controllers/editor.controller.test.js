@@ -168,15 +168,20 @@
       }
     });
 
+    const scope = $scope.$new();
+    const destroy = sinon.stub(scope, '$destroy');
+    const cheatElem = $compile(angular.element('<cheat id="cheat-0"></cheat>'))(scope);
+
     angular
       .element(document.querySelector('#cheats-container'))
-      .append('<cheat id="cheat-0"></cheat>');
+      .append(cheatElem);
 
     should(controller.content.cheats.length).equal(1);
     should(getCheatElemCount()).equal(1);
 
     controller.removeCheat(0);
 
+    should(destroy.callCount).equal(1);
     should(controller.content.cheats[0]).be.undefined();
     should(getCheatElemCount()).equal(0);
   }

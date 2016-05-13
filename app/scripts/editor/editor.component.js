@@ -46,7 +46,7 @@
         formats="vm.availableFormats"
         remove-cheat="vm.removeCheat(${id})"
         manage-error="vm.onAddCheat(${id}, cheat)"></cheat>`;
-      const cheatElem = $compile(angular.element(elem))($scope);
+      const cheatElem = $compile(angular.element(elem))($scope.$new());
 
       angular
         .element(document.getElementById('cheats-container'))
@@ -57,10 +57,10 @@
     }
 
     function removeCheat(id){
-      angular
-        .element(document.getElementById(`cheat-${id}`))
-        .remove();
+      const elem = angular.element(document.getElementById(`cheat-${id}`));
 
+      elem.scope().$destroy();
+      elem.remove();
       _.remove(vm.content.cheats, { id });
       onRemoveCheat(id);
     }
