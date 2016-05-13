@@ -4,6 +4,7 @@
   angular
     .module('n5cheat')
     .constant('ENV', {
+      // list of available consoles
       consoles: {
         gameboy: 'Game Boy',
         gba: 'Game Boy Advance',
@@ -12,6 +13,7 @@
         genesis: 'Genesis',
         sms: 'Sega Master System'
       },
+      // list of available code formats for each console, with their sample codes
       codeFormats: {
         gameboy: [
           {
@@ -68,13 +70,18 @@
           }
         ]
       },
+      // define default values, used in initialization phase
       defaults: {
         console: 'gameboy'
       },
+      // max number of errors displayed in the error pannel, for each error type
       maxCheatErrorsDisplayed: 3,
+      // define anchors ids, for angular $anchorScroll
       anchors: {
         bottom: 'btn-add-cheat',
         up: ''
-      }
+      },
+      // turn on/off debug mode for $compileProvider
+      debug: true
     });
 }());

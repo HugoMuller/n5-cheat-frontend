@@ -7,9 +7,9 @@
 
   //////////////////////////////////////////////////////////////////////////////
 
-  configuration.$inject = ['$routeProvider'];
+  configuration.$inject = ['$routeProvider', '$compileProvider', 'ENV'];
 
-  function configuration($routeProvider){
+  function configuration($routeProvider, $compileProvider, ENV){
     $routeProvider
       .when('/', {
         templateUrl: 'views/main.html'
@@ -20,5 +20,7 @@
       .otherwise({
         redirectTo: '/'
       });
+
+    $compileProvider.debugInfoEnabled(!!ENV.debug);
   }
 }());
