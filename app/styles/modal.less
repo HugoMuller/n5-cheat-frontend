@@ -1,0 +1,59 @@
+@import 'variables';
+@import 'helper';
+
+.modal-content {
+  .dark();
+
+  & > .modal-header {
+    .darker();
+    background-color: @dark-dark-gray;
+    border-bottom-color: @dark-dark-gray;
+  }
+
+  & > .modal-footer {
+    border-top-color: @dark-dark-gray;
+  }
+
+  textarea {
+    resize: none;
+    padding: 1px;
+    margin: 0;
+  }
+
+  .btn-close {
+    opacity: 0.8;
+    color: @red;
+    text-shadow: 0 1px 0 @dark-gray;
+
+    &:hover {
+      opacity: 1;
+      color: @red-hover;
+      text-shadow: 0 1px 0 @dark-gray;
+    }
+  }
+
+  .value-number {
+    color: @purple;
+    font-weight: bolder;
+  }
+
+  .value-status {
+    &.value-status-ok {
+      color: @green;
+    }
+
+    &.value-status-ko {
+      color: @red;
+    }
+  }
+
+  .value-content {
+    max-height: 160px;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    input[type=text] {
+      width: 160px;
+    }
+  }
+}

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="n5cheat">
+<html lang="en" data-ng-app="n5cheat">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -18,11 +18,11 @@
     <!-- endbuild -->
   </head>
 
-  <body ng-app="n5cheat">
+  <body>
     <navbar></navbar>
 
     <div class="content">
-      <div ng-view></div>
+      <div data-ng-view></div>
     </div>
 
     <!-- build:js(.) scripts/vendor.js -->
@@ -53,6 +53,9 @@
     <script src="scripts/xml-code/xml-code.component.js"></script>
     <script src="scripts/error-list/error-list.component.js"></script>
     <script src="scripts/editor/editor.component.js"></script>
+    <script src="scripts/modal/modal.factory.js"></script>
+    <script src="scripts/modal/modal-cheat-generic.ctrl.js"></script>
+    <script src="scripts/modal/modal-cheat-generic.factory.js"></script>
     <!-- endbuild -->
   </body>
 </html>

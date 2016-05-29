@@ -1,4 +1,5 @@
 @import 'variables';
+@import 'helper';
 
 editor {
   display: block;
@@ -17,11 +18,6 @@ editor {
   .fieldset {
     height: 100%;
   }
-}
-
-.dark {
-  background-color: @dark-gray;
-  color: @almost-white;
 }
 
 sup {
@@ -55,17 +51,28 @@ sup {
   .btn
 }
 
+.btn-purple {
+  background: @purple;
+
+  &:hover {
+    background: @purple-hover;
+  }
+}
+
+.btn-red {
+  background: @red;
+
+  &:hover {
+    background: @red-hover;
+  }
+}
+
 .btn-add {
   @border-radius: 10px;
   -webkit-border-radius: @border-radius;
   -moz-border-radius: @border-radius;
   border-radius: @border-radius;
   padding: 5px 7px;
-  background: @purple;
-
-  &:hover {
-    background: @purple-hover;
-  }
 }
 
 .btn-remove {
@@ -74,10 +81,5 @@ sup {
   -moz-border-radius: @border-radius;
   border-radius: @border-radius;
   padding: 1px 2px;
-  background: @red;
   font-size: 12px;
-
-  &:hover {
-    background: @red-hover;
-  }
 }

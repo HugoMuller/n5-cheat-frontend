@@ -1,12 +1,12 @@
 <div class="cheat fieldset">
   <div class="fieldset-legend">
     Cheat #{{vm.cheat.computeCheatId()}}
-    <a class="btn btn-remove" href="" data-ng-click="vm.removeCheat()">
+    <a class="btn btn-red btn-remove" href="" data-ng-click="vm.removeCheat()">
       <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
       remove
     </a>
     <span class="glyphicon cheat-status"
-      ng-class="{ 'glyphicon-ok-sign cheat-status-ok': vm.cheat.isValid(), 'glyphicon-remove-sign cheat-status-ko': !vm.cheat.isValid() }"
+      data-ng-class="{ 'glyphicon-ok-sign cheat-status-ok': vm.cheat.isValid(), 'glyphicon-exclamation-sign cheat-status-ko': !vm.cheat.isValid() }"
       aria-hidden="true">
     </span>
   </div>
@@ -22,9 +22,11 @@
           data-ng-change="vm.onFormatChanges()">
         </select>
       </div>
+
       <div class="col-md-1">Hacker:&nbsp;</div>
       <div class="col-md-4"><input type="text" data-ng-model="vm.cheat.hacker" maxlength="50"></div>
     </div>
+
     <div class="row mt5">
       <div class="col-md-1">Name<sup>*</sup>:&nbsp;</div>
       <div class="col-md-4">
@@ -35,6 +37,7 @@
           class="cheat-name"
           required/>
       </div>
+
       <div class="col-md-1">Code<sup>*</sup>:&nbsp;</div>
       <div class="col-md-4">
         <textarea placeholder="{{vm.placeHolder}}"
@@ -42,6 +45,29 @@
           data-ng-change="vm.updateError()"
           class="cheat-code"
           required></textarea>
+      </div>
+    </div>
+
+    <div class="row mt5">
+      <div class="col-md-4">
+        <a href=""
+          class="generic-mode"
+          data-ng-click="vm.switchGenericMode()">
+          <span class="glyphicon"
+            data-ng-class="{ 'glyphicon-check': vm.cheat.isGeneric, 'glyphicon-unchecked': !vm.cheat.isGeneric }">
+          </span>
+          Generic Mode
+        </a>
+      </div>
+      <div class="col-md-1"></div>
+
+      <div class="col-md-4" data-ng-if="vm.cheat.isGeneric">
+        <a href=""
+          class="derived-cheats"
+          data-ng-click="vm.editDerivedCheats()">
+          <span class="glyphicon glyphicon-edit"></span>
+          Edit derived cheats
+        </a>
       </div>
     </div>
   </div>

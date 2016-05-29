@@ -33,6 +33,8 @@
         cheat.hacker = '';
         cheat.name = '';
         cheat.code = '';
+        cheat.isGeneric = false;
+        cheat.subCheats = [];
 
         cheat.computeCheatId = computeCheatId;
         cheat.formatedCode = formatedCode;

@@ -1,0 +1,79 @@
+<div class="modal-header">
+  <button type="button" class="close btn-close" aria-label="Cancel" data-ng-click="vm.cancel()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <h3 class="modal-title">{{vm.title}}</h3>
+</div>
+
+<div class="modal-body">
+  <div class="row mt5">
+    <div class="col-md-2">Name<sup>*</sup>:&nbsp;</div>
+    <div class="col-md-4">
+      <input type="text"
+        data-ng-model="vm.cheat.name"
+        maxlength="50"
+        class="cheat-name"
+        required/>
+    </div>
+
+    <div class="col-md-2">Code<sup>*</sup>:&nbsp;</div>
+    <div class="col-md-4">
+      <textarea placeholder="{{vm.placeHolder}}"
+        data-ng-model="vm.cheat.code"
+        class="cheat-code"
+        required></textarea>
+    </div>
+  </div>
+
+  <div class="value-container fieldset mt15">
+    <div class="fieldset-legend">Values</div>
+    <div class="fieldset-content">
+      <div class="value-content">
+        <div data-ng-repeat="subCheat in vm.cheat.subCheats"
+          class="row mt5 mb15">
+          <div class="col-md-1 value-number">#{{$index+1}}</div>
+
+          <div class="col-md-4">
+            <input type="text"
+              placeholder="name"
+              data-ng-model="subCheat.name"
+              maxlength="30"
+              class="cheat-name"
+              required/>
+          </div>
+
+          <div class="col-md-4">
+            <input type="text"
+              placeholder="value"
+              data-ng-model="subCheat.code"
+              class="cheat-code"
+              required/>
+          </div>
+
+          <div class="col-md-3">
+            <a class="btn btn-red btn-remove" href="" data-ng-click="vm.removeValue($index)">
+              <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+              remove
+            </a>
+            <span class="glyphicon cheat-status"
+              data-ng-class="{ 'glyphicon-ok-sign cheat-status-ok': vm.valueIsValid($index), 'glyphicon-exclamation-sign cheat-status-ko': !vm.valueIsValid($index) }"
+              aria-hidden="true">
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <a id="btn-add-cheat" class="btn btn-purple btn-add-value" href="" data-ng-click="vm.addValue()">
+          <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+          Add value
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button class="btn btn-purple" type="button" data-ng-click="vm.save()">Save</button>
+  <button class="btn btn-red" type="button" data-ng-click="vm.cancel()">Cancel</button>
+</div>

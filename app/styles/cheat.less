@@ -1,7 +1,5 @@
 @import 'variables';
 
-@width-180: 180px;
-
 cheat {
   display: block;
 }
@@ -29,15 +27,43 @@ cheat {
     margin-right: 10px;
   }
 
-  .cheat-status {
-    float: right;
+  a.generic-mode {
+    text-decoration: none;
+    color: @almost-white;
 
-    &.cheat-status-ok {
+    .glyphicon-check {
       color: @green;
     }
 
-    &.cheat-status-ko {
-      color: @red;
+    .glyphicon-unchecked {
+      color: @almost-white;
     }
+  }
+
+  a.derived-cheats {
+    text-decoration: none;
+    color: @almost-white;
+
+    .glyphicon-edit {
+      color: @purple;
+    }
+
+    &:hover {
+      .glyphicon-edit {
+        color: @purple-hover;
+      }
+    }
+  }
+}
+
+.cheat-status {
+  float: right;
+
+  &.cheat-status-ok {
+    color: @green;
+  }
+
+  &.cheat-status-ko {
+    color: @red;
   }
 }

@@ -18,9 +18,9 @@
 
   //////////////////////////////////////////////////////////////////////////////
 
-  CheatCtrl.$inject = [];
+  CheatCtrl.$inject = ['modalGenericCheatFactory'];
 
-  function CheatCtrl(){
+  function CheatCtrl(modalGenericCheatFactory){
     const vm = this;
 
     vm.$onInit = $onInit;
@@ -28,6 +28,8 @@
     vm.updatePlaceHolder = updatePlaceHolder;
     vm.updateError = updateError;
     vm.onFormatChanges = onFormatChanges;
+    vm.switchGenericMode = switchGenericMode;
+    vm.editDerivedCheats = editDerivedCheats;
 
     function $onInit(){
       vm.cheat.console = vm.console;
@@ -64,6 +66,20 @@
 
     function updateError(){
       vm.manageError({ cheat: vm.cheat });
+    }
+
+    function switchGenericMode(){
+      vm.cheat.isGeneric = !vm.cheat.isGeneric;
+    }
+
+    function editDerivedCheats(){
+      modalGenericCheatFactory
+        .open(vm.cheat, vm.placeHolder)
+        .then((result) => {
+          console.log('that cheat was saved: ', result)
+        }, (reason) => {
+          console.log('canceld with reason: ', reason)
+        });
     }
   }
 }());
